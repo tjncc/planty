@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal } from "react-bootstrap";
 import '../css/Header.css'
 import {serviceConfig} from '../appSettings.js'
-//import axios from 'axios'
+import axios from 'axios'
 
 
 class RegisterPage extends React.Component{
@@ -10,7 +10,7 @@ class RegisterPage extends React.Component{
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
-        //this.SendRegisterRequest = this.SendRegisterRequest.bind(this);
+        this.SendRegisterRequest = this.SendRegisterRequest.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
@@ -20,9 +20,6 @@ class RegisterPage extends React.Component{
             email: '',
             password: '',
             username: '',
-
-            firstname: '',
-            lastname: '',
 
             repeatedPassword: '',
 
@@ -35,11 +32,11 @@ class RegisterPage extends React.Component{
     }
 
 
-/*
+
     SendRegisterRequest(e) {
         e.preventDefault();
 
-        if(this.state.password.length < 8){
+        if(this.state.password.length < 1){
 
             alert('Password is too short!');
             return;
@@ -49,15 +46,19 @@ class RegisterPage extends React.Component{
             alert('Repeated password does not match!');
             return;
         } else {
+            console.log(this.state)
 
-            axios.post(`${serviceConfig.baseURL}/auth/register/user`,this.state).then(
-                (resp) => { window.location.href = "http://localhost:3000/" },
+            axios.post(`${serviceConfig.baseURL}/auth/register`,this.state).then(
+                (resp) => { 
+                    alert('success')
+                    window.location.href = "http://localhost:3000/" 
+                },
                 (resp) => { alert('error') }
             );
 
         }
     }
-*/
+
     handleClose() {
         this.setState({ show: false });
     }
@@ -86,18 +87,7 @@ class RegisterPage extends React.Component{
 
             <Modal.Body style={{background: "rgba(215, 242, 243,0.6)"}}>
 
-            <Form className="formRLogin" >
-
-                <Form.Group as={Col}>
-                    <Form.Label >First Name:</Form.Label>
-                    <Form.Control type="text" style={{background: "rgb(244, 245, 249)"}} placeholder="Enter first name" id="firstname" name="firstname" onChange={this.handleChange} required/>
-                </Form.Group>
-
-                <Form.Group as={Col}>
-                    <Form.Label >Last Name:</Form.Label>
-                    <Form.Control  type="text" style={{background: "rgb(244, 245, 249)"}} placeholder="Enter last name" id="lastname" name="lastname" onChange={this.handleChange} required/>
-                </Form.Group>
-
+            <Form className="formRLogin" onSubmit={this.SendRegisterRequest}>
 
 
                 <Form.Group as={Col}>

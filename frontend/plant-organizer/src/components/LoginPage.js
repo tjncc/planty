@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal } from "react-bootstrap";
 import {serviceConfig} from '../appSettings.js'
-//import axios from 'axios'
+import axios from 'axios'
 import '../css/Header.css'
 
 class LoginPage extends React.Component{
@@ -9,7 +9,7 @@ class LoginPage extends React.Component{
         super(props);
 
         this.handleChange = this.handleChange.bind(this);
-        //this.Login = this.Login.bind(this);
+        this.login = this.login.bind(this);
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
@@ -24,8 +24,8 @@ class LoginPage extends React.Component{
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
-    /*
-    Login(e) {
+    
+    login(e) {
         e.preventDefault();
 
         axios.post(`${serviceConfig.baseURL}/auth/login`,this.state).then(
@@ -38,13 +38,13 @@ class LoginPage extends React.Component{
                 };
 
                 window.location.href = "http://localhost:3000/"
-                //alert('success') 
+                alert('success') 
             },
             (resp) => { alert('Username or password is incorrect!') }
         );
 
     }
-    */
+    
 
     handleClose() {
         this.setState({ show: false });
@@ -74,7 +74,7 @@ class LoginPage extends React.Component{
 
                 <Modal.Body style={{background: "rgba(215, 242, 243,0.6)"}}>
 
-                <Form className="formRLogin" >
+                <Form className="formRLogin" onSubmit={this.login}>
 
                     <Form.Group as={Col}>
                         <Form.Label >Username:</Form.Label>

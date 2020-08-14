@@ -1,0 +1,1 @@
+insert into users(id, username, email, role, password, reset_pass) values (-1, 'admin', 'admin@gmail.com', 'ADMIN', '$2a$10$En99NVAv.YrTtVxJ1fssBeVO4AFnfl1OMwzFbPeaDdSBm1KLUzp12', '2019-12-01 09:00:01');
