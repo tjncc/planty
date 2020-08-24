@@ -1,5 +1,6 @@
 package plantorganizer.controller;
 
+import plantorganizer.dto.UserDTO;
 import plantorganizer.model.PersonTokenState;
 import plantorganizer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import plantorganizer.security.TokenUtils;
 import plantorganizer.security.auth.JwtAuthenticationRequest;
 import plantorganizer.service.interfaces.UserService;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,11 +71,12 @@ public class AuthenticationController {
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<?> getUser(@PathVariable String id){
-        User user = userService.findById(Long.parseLong(id));
+    public ResponseEntity<?> getUser(Principal p){
+        User user = userService.findByUsername(p.getName());
 
         if(user != null){
-            return ResponseEntity.ok(user);
+            UserDTO userDTO = new UserDTO(user);
+            return ResponseEntity.ok(userDTO);
         }else {
             return  ResponseEntity.status(500).build();
         }
