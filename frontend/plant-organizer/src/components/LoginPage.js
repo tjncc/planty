@@ -58,9 +58,9 @@ class LoginPage extends React.Component{
     render(){
         return(
             <div>
-                <button className="btnHeaderLogin" onClick={this.handleShow}>
+                <a className="btnHeaderLogin" onClick={this.handleShow}>
                     Log in
-                </button>
+                </a>
                 <Modal
                     show={this.state.show}
                     onHide={this.handleClose}

@@ -71,9 +71,9 @@ class RegisterPage extends React.Component{
         return(
             <div>
 
-                <button className="btnHeaderReg" onClick={this.handleShow}>
+                <a className="btnHeaderReg" onClick={this.handleShow}>
                     Register
-                </button>
+                </a>
                 <Modal
                     show={this.state.show}
                     onHide={this.handleClose}
@@ -114,7 +114,7 @@ class RegisterPage extends React.Component{
                     </Form.Group>
                 </Form.Row>
 
-                <Button variant="outline-secondary" style={{float: "right", margin: "4% 39% 1% 0"}} onClick={this.handleClose}>
+                <Button variant="outline-secondary" className="btnReg" style={{float: "right", margin: "4% 39% 1% 0"}} onClick={this.handleClose}>
                     Close
                 </Button>
 
