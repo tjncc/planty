@@ -1,5 +1,6 @@
 package plantorganizer.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
+
 
     @Bean
     @Override
@@ -68,6 +75,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // svim korisnicima dopusti da pristupe putanjama /auth/login, /auth/register, /activate
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/plant/**").permitAll()
 
 
                 // svaki zahtev mora biti autorizovan
@@ -91,6 +99,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(HttpMethod.POST, "/auth/**");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
+        web.ignoring().antMatchers(HttpMethod.DELETE);
 
 
     }
