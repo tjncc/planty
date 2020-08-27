@@ -55,7 +55,7 @@ public class PlantController {
     public ResponseEntity<?> getAllPlants(){
         List<PlantDTO> plants = plantService.findAll();
         if(plants != null){
-            return new ResponseEntity<>(plants, HttpStatus.CREATED);
+            return new ResponseEntity<>(plants, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Plants cannot load", HttpStatus.BAD_REQUEST);
         }

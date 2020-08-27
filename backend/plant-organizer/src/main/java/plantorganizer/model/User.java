@@ -3,10 +3,13 @@ package plantorganizer.model;
 import plantorganizer.helpers.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import plantorganizer.repository.PlantRepository;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -32,6 +35,9 @@ public class User implements UserDetails {
 
     @Column(name = "reset_pass")
     private Timestamp lastPasswordResetDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    private List<PlantRequest> plantRequests = new ArrayList<>();
 
     public User() {
         super();
@@ -117,4 +123,11 @@ public class User implements UserDetails {
         return true;
     }
 
+    public List<PlantRequest> getPlantRequests() {
+        return plantRequests;
+    }
+
+    public void setPlantRequests(List<PlantRequest> plantRequests) {
+        this.plantRequests = plantRequests;
+    }
 }
