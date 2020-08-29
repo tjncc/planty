@@ -23,7 +23,7 @@
     border-radius: 8%;
 }
 
-.btnHeaderReg:hover, .btnHeaderLogin:hover{
+.btnHeaderReg:hover, .btnHeaderLogin:hover, .addPlant:hover, .homeBtn:hover{
     color: rgb(7, 70, 70);
     outline: none;
     text-decoration: none;
@@ -42,6 +42,8 @@
     border-radius: 8%;
 }
 
+
+
 @media screen and (max-width: 500px) {
     .header .logo { 
         display: none;
@@ -55,6 +57,10 @@
     .logoutBtn{
         width: 100%;
         border-radius: 2%;
+    }
+
+    .homeBtn{
+        width: 100%;
     }
 
     .header-right {

@@ -12,6 +12,7 @@ class Header extends React.Component {
         super(props);
 
         this.logout = this.logout.bind(this);
+        //this.changePath = this.changePath.bind(this);
 
         this.state = {
             isLoggedIn: false,
@@ -57,23 +58,36 @@ class Header extends React.Component {
         window.location.href="http://localhost:3000/";
     }
 
+    changePath(path){
+        window.location.href=`http://localhost:3000/${path}`
+
+    }
+
 
 
     render() {
         return (
 
             <div className="header" id="myTopnav">
-                 <img src={logo} className="logo" style={{ height: '45px', width: 'auto', margin: "2px 0 0 47%", float: "left" }} alt='Unavailable icon' />
-
-                { !this.state.isLoggedIn && 
-                <div className="header-right">
-                    <Login />
-                    <Register />
-                </div>
+                <a style={{float: 'left'}} className="homeBtn" onClick={this.changePath.bind(this,"")}>Home</a>
+                 <img src={logo} onClick={this.changePath.bind(this,"")} className="logo" style={{ height: '45px', width: 'auto', margin: "2px 0 0 42%", float: "left", cursor: "pointer" }} alt='Unavailable icon' />
+                    
+                { 
+                    !this.state.isLoggedIn && 
+                    <div className="header-right">
+                        <Login />
+                        <Register />
+                    </div>
                 }
                 {
                     this.state.isLoggedIn && this.state.user.role === "ADMIN" &&
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
+                }
+                {
+                    this.state.isLoggedIn && this.state.user.role === "USER" &&
+                    <div className="header-right">
+                    <button className="logoutBtn" onClick={this.logout}>Log out</button>
+                    </div>
                 }
 
             </div>

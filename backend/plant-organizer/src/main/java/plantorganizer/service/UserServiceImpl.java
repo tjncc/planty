@@ -3,6 +3,7 @@ package plantorganizer.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import plantorganizer.helpers.Role;
 import plantorganizer.helpers.TimeProvider;
+import plantorganizer.model.Authority;
 import plantorganizer.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,10 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import plantorganizer.repository.UserRepository;
+import plantorganizer.service.interfaces.AuthorityService;
 import plantorganizer.service.interfaces.UserService;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +31,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthorityService authorityService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -56,6 +63,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User save(User user) {
         user.setRole(Role.USER);
+
+        Authority authority = authorityService.findByName(Role.USER.toString());
+        List<Authority> authorities = new ArrayList<>();
+        authorities.add(authority);
+        user.setAuthorities(authorities);
+
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setLastPasswordResetDate(timestamp);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
