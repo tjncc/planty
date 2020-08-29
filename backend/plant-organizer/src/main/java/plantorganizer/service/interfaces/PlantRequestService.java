@@ -11,4 +11,6 @@ public interface PlantRequestService {
     PlantRequestDTO save(PlantDTO plantDTO);
     List<PlantRequestDTO> findAll();
     PlantRequestDTO findById(long id);
+    boolean approveRequest(long id);
+    boolean declineRequest(long id);
 }

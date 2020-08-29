@@ -9,6 +9,7 @@ import plantorganizer.helpers.RequestStatus;
 import plantorganizer.model.PlantRequest;
 import plantorganizer.repository.PlantRequestRepository;
 import plantorganizer.service.interfaces.PlantRequestService;
+import plantorganizer.service.interfaces.PlantService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,9 @@ public class PlantRequestServiceImpl implements PlantRequestService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    PlantService plantService;
 
     @Override
     public PlantRequestDTO save(PlantDTO plantDTO) {
@@ -49,5 +53,28 @@ public class PlantRequestServiceImpl implements PlantRequestService {
             return null;
         }
         return modelMapper.map(request,PlantRequestDTO.class);
+    }
+
+    @Override
+    public boolean approveRequest(long id) {
+        PlantRequest request = plantRequestRepository.findById(id);
+        if(request == null || !request.getRequestStatus().equals(RequestStatus.PENDING)){
+            return false;
+        }
+        PlantDTO plantDTO = modelMapper.map(request,PlantDTO.class);
+        request.setRequestStatus(RequestStatus.ACCEPTED);
+        plantService.save(plantDTO);
+        return true;
+    }
+
+    @Override
+    public boolean declineRequest(long id) {
+        PlantRequest request = plantRequestRepository.findById(id);
+        if(request == null || !request.getRequestStatus().equals(RequestStatus.PENDING)){
+            return false;
+        }
+        request.setRequestStatus(RequestStatus.CANCELLED);
+        plantRequestRepository.save(request);
+        return true;
     }
 }
