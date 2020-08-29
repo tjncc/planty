@@ -36,6 +36,12 @@ public class User implements UserDetails {
     @Column(name = "reset_pass")
     private Timestamp lastPasswordResetDate;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "name"))
+    private List<Authority> authorities = new ArrayList<>();
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private List<PlantRequest> plantRequests = new ArrayList<>();
 
@@ -68,7 +74,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorities;
     }
 
     public String getPassword() {
@@ -121,6 +127,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public List<PlantRequest> getPlantRequests() {

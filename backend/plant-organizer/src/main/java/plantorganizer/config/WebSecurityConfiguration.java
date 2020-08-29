@@ -76,7 +76,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/plant/**").permitAll()
-                .antMatchers("/plantrequest/**").permitAll()
+                .antMatchers("/plantrequest/watering**").permitAll()
 
 
                 // svaki zahtev mora biti autorizovan

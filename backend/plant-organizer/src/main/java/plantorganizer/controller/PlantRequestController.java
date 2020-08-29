@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.dto.PlantRequestDTO;
 import plantorganizer.service.interfaces.PlantRequestService;
 import plantorganizer.service.interfaces.PlantService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,10 +25,11 @@ public class PlantRequestController {
         public String reqId;
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
-    public ResponseEntity<?> addPlantRequest(@RequestBody PlantDTO plantDTO) {
+    public ResponseEntity<?> addPlantRequest(@RequestBody PlantDTO plantDTO, Principal p) {
 
-        PlantRequestDTO plant = plantRequestService.save(plantDTO);
+        PlantRequestDTO plant = plantRequestService.save(plantDTO, p);
         if(plant != null){
             return new ResponseEntity<>(plant, HttpStatus.CREATED);
         } else {
@@ -72,6 +75,17 @@ public class PlantRequestController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Request cannot be declined.",HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
+    @GetMapping("watering")
+    public ResponseEntity<?> getWateringTime(){
+        List<String> values = plantRequestService.getWateringTime();
+        if(values != null){
+            return new ResponseEntity<>(values, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Error while loading.", HttpStatus.BAD_REQUEST);
         }
     }
 
