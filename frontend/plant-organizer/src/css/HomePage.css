@@ -8,16 +8,15 @@
 }
 
 .div1{
-    width: 33%;
+    width: 20%;
+    margin-top: 4%;
 }
 
 .div2{
-    width: 33%;
+    width: 80%;
 }
 
-.div3{
-    width: 33%;
-}
+
 
 @media screen and (max-width: 700px) {
     .mainDiv{
@@ -25,7 +24,7 @@
         text-align: center;
     }
 
-    .div1, .div2, .div3{
+    .div1, .div2{
         width: 99%;
         margin: 2%;
     }
@@ -35,13 +34,12 @@
     outline: none;
     border: 1.4px solid rgb(222, 233, 233);
     border-radius: 8%;
-    color: #000;
+    color: rgb(59, 85, 85);
+    font-size: 22px;
     padding: 5px 10px;
     background-color: rgb(229, 240, 240);
 }
 
-.iconsBtn{
-    justify-self: center;
-    display: flex;
-    flex-direction: column;
+.btnAddNew:hover{
+    background-color:rgb(195, 224, 224);
 }

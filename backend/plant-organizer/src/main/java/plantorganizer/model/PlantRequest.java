@@ -28,7 +28,10 @@ public class PlantRequest {
     @Column
     private RequestStatus requestStatus;
 
-    @ManyToOne()
+    @Column(columnDefinition="text", length=10485760)
+    private String image;
+
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "creator_id")
     private User creator;
 
@@ -82,6 +85,14 @@ public class PlantRequest {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public User getCreator() {

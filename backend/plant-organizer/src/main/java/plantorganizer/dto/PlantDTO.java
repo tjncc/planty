@@ -5,13 +5,24 @@ import plantorganizer.model.Plant;
 
 public class PlantDTO {
 
+    private long id;
     private String name;
     private String family;
     private WateringTime wateringTime;
     private String info;
+    private String image;
+    private String creator;
 
     public PlantDTO(){
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -45,4 +56,21 @@ public class PlantDTO {
     public void setInfo(String info) {
         this.info = info;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
 }

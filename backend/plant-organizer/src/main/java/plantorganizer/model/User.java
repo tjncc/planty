@@ -45,6 +45,9 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private List<PlantRequest> plantRequests = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    private List<Plant> plants = new ArrayList<>();
+
     public User() {
         super();
     }
@@ -139,5 +142,13 @@ public class User implements UserDetails {
 
     public void setPlantRequests(List<PlantRequest> plantRequests) {
         this.plantRequests = plantRequests;
+    }
+
+    public List<Plant> getPlants() {
+        return plants;
+    }
+
+    public void setPlants(List<Plant> plants) {
+        this.plants = plants;
     }
 }

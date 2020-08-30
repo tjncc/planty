@@ -10,6 +10,7 @@ public class PlantRequestDTO {
     private WateringTime wateringTime;
     private String info;
     private RequestStatus requestStatus;
+    private String image;
 
     public PlantRequestDTO(){
 
@@ -53,5 +54,13 @@ public class PlantRequestDTO {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

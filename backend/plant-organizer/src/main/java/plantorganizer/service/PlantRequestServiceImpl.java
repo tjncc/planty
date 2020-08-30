@@ -75,6 +75,9 @@ public class PlantRequestServiceImpl implements PlantRequestService {
             return false;
         }
         PlantDTO plantDTO = modelMapper.map(request,PlantDTO.class);
+        if(request.getCreator() != null) {
+            plantDTO.setCreator(request.getCreator().getUsername());
+        }
         request.setRequestStatus(RequestStatus.ACCEPTED);
         plantService.save(plantDTO);
         return true;

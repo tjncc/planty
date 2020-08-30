@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, FormGroup, FormControl, ControlLabel, Col, Modal } from "react-bootstrap";
+import { Form, Button, FormGroup, FormControl, ControlLabel, Col, Row } from "react-bootstrap";
 import { serviceConfig } from '../appSettings.js'
 import '../css/AddPlant.css'
 import background from '../icons/bcgrnd.png'
@@ -11,12 +11,16 @@ class AddPlant extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.addPlant = this.addPlant.bind(this);
+        this.handleImageUpload = this.handleImageUpload.bind(this);
+        this.removeImage = this.removeImage.bind(this);
 
         this.state = {
             name: '',
             family: '',
             wateringTime: '',
             info: '',
+            file: '',
+            image: '',
             wateringValues: []
         }
     }
@@ -49,6 +53,28 @@ class AddPlant extends React.Component {
         }
     }
 
+    handleImageUpload(e) {
+        
+        e.preventDefault();
+    if(e.target.files[0] !== undefined){
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        
+        
+        reader.onload = () => {
+          this.setState({
+            file: file,
+            image: reader.result
+          });
+        }
+    
+        reader.readAsDataURL(file)
+
+        }
+      }
+
+
     addPlant(e){
         e.preventDefault();
 
@@ -59,7 +85,8 @@ class AddPlant extends React.Component {
             name: this.state.name,
             family: this.state.family,
             wateringTime: this.state.wateringTime.toUpperCase(),
-            info: this.state.info 
+            info: this.state.info,
+            image: this.state.image 
         }
         console.log(plant)
         if(token !== null){
@@ -78,7 +105,12 @@ class AddPlant extends React.Component {
         }
     }
 
-
+    removeImage(){
+        this.setState({
+            file: '',
+            image: ''
+          });
+    }
 
 
     render() {
@@ -90,7 +122,8 @@ class AddPlant extends React.Component {
 
                     <div className="formAddPlant">
                         <Form className="formRLogin" onSubmit={this.addPlant}>
-
+                            <div className="bigForm">
+                            <div className="leftForm">
                             <Form.Group as={Col}>
                                 <Form.Label >Name:</Form.Label>
                                 <Form.Control type="text" style={{ background: "rgb(250, 255, 255)" }} placeholder="What is this plant's name?" id="name" name="name" onChange={this.handleChange} />
@@ -118,10 +151,39 @@ class AddPlant extends React.Component {
                                     id="info" name="info" onChange={this.handleChange}
                                     />
                                 </Form.Group>
-
-                                <Button variant="outline-success" type="submit" style={{ margin: "2.5% 0 0 40%" }}>
+                                <Form.Group as={Col} style={{margin: '0 auto', textAlign:'center'}}>
+                                <button className="submitPlantBtn" type="submit">
                                     Add plant
-                            </Button>
+                            </button>
+                            </Form.Group>
+                                </div>
+                                <div className="rightForm">
+
+                                <Form.Group as={Col}>
+                                    <input className="fileInput" 
+                                    type="file" 
+                                    style={{display: 'none'}}
+                                    onChange={this.handleImageUpload}
+                                    ref={fileInput => this.fileInput = fileInput} />
+                                <button className="addImageBtn" type="button" onClick={() => this.fileInput.click()}>Upload image</button>
+
+                                 <div className="imgPreview">
+                                    {
+                                        this.state.image !== "" &&
+                                        <div>
+                                        <img className="uploadedImage" src={this.state.image} />
+                                        <button className="removeImageBtn" onClick={this.removeImage}>Remove image</button>
+                                        </div>
+                                    }
+                                    </div>
+                                </Form.Group>
+                                <Form.Group as={Col} className="formGroupSmallerBtn" style={{margin: '0 auto', textAlign:'center'}}>
+                                    <button className="submitPlantBtn1" type="submit">
+                                        Add plant
+                                    </button>
+                                </Form.Group>
+                                </div>
+                                </div>
                         </Form>
 
                     </div>

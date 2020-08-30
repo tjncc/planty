@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.model.Plant;
+import plantorganizer.model.User;
 import plantorganizer.repository.PlantRepository;
 import plantorganizer.service.interfaces.PlantService;
+import plantorganizer.service.interfaces.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,9 @@ public class PlantServiceImpl implements PlantService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    UserService userService;
 
     @Override
     public PlantDTO findById(long id) {
@@ -44,6 +49,11 @@ public class PlantServiceImpl implements PlantService {
     public PlantDTO save(PlantDTO plantDTO) {
 
         Plant plant = modelMapper.map(plantDTO, Plant.class);
+        User creator = userService.findByUsername(plantDTO.getCreator());
+        if(creator != null){
+            plant.setCreator(creator);
+        }
+        //creator.getPlants().add(plant);
         plantRepository.save(plant);
         return plantDTO;
     }
@@ -56,6 +66,7 @@ public class PlantServiceImpl implements PlantService {
 
         for (Plant p: plants) {
             PlantDTO plantDTO = modelMapper.map(p, PlantDTO.class);
+            plantDTO.setCreator(p.getCreator().getUsername());
             plantDTOS.add(plantDTO);
         }
         return plantDTOS;

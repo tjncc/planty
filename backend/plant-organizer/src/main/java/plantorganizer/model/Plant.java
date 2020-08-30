@@ -24,6 +24,13 @@ public class Plant {
     @Column
     private String info;
 
+    @Column(columnDefinition="text", length=10485760)
+    private String image;
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
     public Plant(){
 
     }
@@ -66,5 +73,21 @@ public class Plant {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }
