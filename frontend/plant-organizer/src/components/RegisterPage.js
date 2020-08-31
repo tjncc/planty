@@ -92,19 +92,19 @@ class RegisterPage extends React.Component{
 
                 <Form.Group as={Col}>
                     <Form.Label >Email:</Form.Label>
-                    <Form.Control type="email" style={{background: "rgb(244, 245, 249)"}} placeholder="Enter email" id="email" name="email" onChange={this.handleChange} required/>
+                    <Form.Control type="email" style={{background: "rgb(250, 255, 255)"}} placeholder="Enter email" id="email" name="email" onChange={this.handleChange} required/>
                 </Form.Group>
 
                 
                 <Form.Group as={Col}>
                     <Form.Label >Username:</Form.Label>
-                    <Form.Control type="text" style={{background: "rgb(244, 245, 249)"}} placeholder="Enter username" id="username" name="username" onChange={this.handleChange} required/>
+                    <Form.Control type="text" style={{background: "rgb(250, 255, 255)"}} placeholder="Enter username" id="username" name="username" onChange={this.handleChange} required/>
                 </Form.Group>
 
                 <Form.Row >
                     <Form.Group as={Col} style={{margin: "0 5px 0 15px"}}>
                         <Form.Label>Password:</Form.Label>
-                        <Form.Control type="password" style={{background: "rgb(244, 245, 249)"}} placeholder="Password" id="password" name="password" onChange={this.handleChange} required/>
+                        <Form.Control type="password" style={{background: "rgb(250, 255, 255)"}} placeholder="Password" id="password" name="password" onChange={this.handleChange} required/>
                         <legend className="legendPass">Password should contain 8 characters minimum.</legend>
                     </Form.Group>
 

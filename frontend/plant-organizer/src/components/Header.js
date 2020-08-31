@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap"
 import { serviceConfig } from '../appSettings.js'
 import '../css/Header.css'
 import logo from '../icons/leaf.svg'
+import usericon from '../icons/user.svg'
 import Login from './LoginPage'
 import Register from './RegisterPage'
 import axios from 'axios'
@@ -81,12 +82,17 @@ class Header extends React.Component {
                 }
                 {
                     this.state.isLoggedIn && this.state.user.role === "ADMIN" &&
+                    <div className="header-right">
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
+                    <img src={usericon} className="profileIcon" title="Profile" onClick={this.changePath.bind(this, "profile/" + this.state.user.username)} />
+                    </div>
                 }
                 {
                     this.state.isLoggedIn && this.state.user.role === "USER" &&
                     <div className="header-right">
                     <button className="logoutBtn" onClick={this.logout}>Log out</button>
+                    <img src={usericon} className="profileIcon" title="Profile" onClick={this.changePath.bind(this, "profile/" + this.state.user.username)} />
+
                     </div>
                 }
 

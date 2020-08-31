@@ -25,8 +25,6 @@ class RenderPlants extends React.Component {
     getAllPlants(){
         let token = localStorage.getItem('token');
         let self = this;
-
-        if(token !== null){
   
             const options = {
                 headers: { 'Authorization': 'Bearer ' + token}
@@ -38,7 +36,11 @@ class RenderPlants extends React.Component {
                     },
                     (response) => {alert('Error while loading plants.')}
             );
-        }
+        
+    }
+
+    view(id){
+        window.location.href= `http://localhost:3000/plant/${id}`
     }
 
     renderCards(){
@@ -47,7 +49,7 @@ class RenderPlants extends React.Component {
 
             return(
                 <div className="cardDiv">
-                    <Card key={plant.id} className="cardContainerAll" >
+                    <Card key={plant.id} onClick={this.view.bind(this,plant.id)} className="cardContainerAll" >
 
                     <Card.Img variant="top" src={plant.image} />
                     {

@@ -1,0 +1,64 @@
+.mainDivPlantView{
+    display: flex;
+    flex-direction: row;
+    padding: 2% 6%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(102, 138, 139);
+}
+
+.div1PlantView, .div2PlantView, .div3PlantView{
+    display: flex;
+    flex-direction: column;
+    padding: 1% 2%;
+}
+
+.div1PlantView{
+    width: 33%;
+    border: 1px solid rgb(201, 218, 217);
+    padding: 1% 5% 5% 5%;
+}
+
+.div2PlantView{
+    width: 40%;
+}
+
+.div3PlantView{
+    width: 27%;
+}
+
+.plantName{
+    font-size: 46px;
+}
+
+.plantFam{
+    font-size: 28px;
+    margin-top: -10px;
+}
+
+.plantImg{
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+}
+
+.plantWater1, .plantInfo1{
+    color: rgb(159, 173, 175);
+    font-size: 21px;
+}
+
+.plantInfo, .plantWater{
+    font-size: 21px;
+}
+
+.userLikeBtn{
+    font-size: 21px;
+    border:none;
+    outline: none;
+    background-color: rgb(215, 232, 235);
+    width: 80%;
+    height: 10%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(77, 106, 107);
+}
+
