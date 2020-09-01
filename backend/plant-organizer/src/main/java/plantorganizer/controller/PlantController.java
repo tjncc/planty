@@ -1,6 +1,7 @@
 package plantorganizer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,9 +52,9 @@ public class PlantController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllPlants(){
-        List<PlantDTO> plants = plantService.findAll();
+    @GetMapping(params = {"page","size"})
+    public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size){
+        Page<PlantDTO> plants = plantService.findPageable(page,size);
         if(plants != null){
             return new ResponseEntity<>(plants, HttpStatus.OK);
         } else {

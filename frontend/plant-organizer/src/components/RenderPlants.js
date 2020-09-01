@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card } from "react-bootstrap"
+import { Button, Card, Pagination } from "react-bootstrap"
 import { serviceConfig } from '../appSettings.js'
 import '../css/RenderPlants.css'
 import planticon from '../icons/flower.svg'
@@ -14,7 +14,9 @@ class RenderPlants extends React.Component {
 
         this.state = {
             plants: [],
-
+            totalPages: 0,
+            pageNumber: 0,
+            size: 8,
         }
     }
 
@@ -30,20 +32,49 @@ class RenderPlants extends React.Component {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
 
-            axios.get(`${serviceConfig.baseURL}/plant`, options).then(
+            axios.get(`${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`, options).then(
                     (response) => { 
-                        this.setState({ plants: response.data });
+                        this.setState({ 
+                            plants: response.data.content,
+                            totalPages: response.data.totalPages,
+                            pageNumber: response.data.pageable.pageNumber 
+                        });
+                        console.log(response.data)
                     },
                     (response) => {alert('Error while loading plants.')}
             );
         
     }
 
+    changePage(e, num){
+        if(num > this.state.totalPages - 1 || num < 0 || num === this.state.pageNumber)
+            return
+ 
+        this.setState({pageNumber: num}, this.getAllPlants);
+
+    }
+
+    renderPagination(){
+        let paginationElements = [];
+
+        for (let index = 0; index < this.state.totalPages; index++) {
+            if(index === this.state.pageNumber)
+                paginationElements.push(<Pagination.Item key={index} active>{index+1}</Pagination.Item>)
+            else
+                paginationElements.push(<Pagination.Item key={index} onClick={(e) => this.changePage(e, index)}>{index+1}</Pagination.Item>)
+                      
+        }
+
+        return paginationElements;
+    }
+
+
     view(id){
         window.location.href= `http://localhost:3000/plant/${id}`
     }
 
     renderCards(){
+        if(this.state.plants.length > 0){
         return this.state.plants.map((plant, index) => {
             
 
@@ -68,14 +99,26 @@ class RenderPlants extends React.Component {
             )
             
             
-        })    
+        }) 
+    }   
     }
 
 
     render(){
         return(
+            <div>
             <div className="renderAllPlants">
                 {this.renderCards()}
+                </div>
+                <div>
+                <Pagination className="paginationPlants">
+                    <Pagination.First onClick={(e) => this.changePage(e, 0)}/>
+                    <Pagination.Prev onClick={(e) => this.changePage(e, this.state.pageNumber - 1)}/>
+                        {this.renderPagination()}
+                    <Pagination.Next  onClick={(e) => this.changePage(e, this.state.pageNumber + 1)}/>
+                    <Pagination.Last  onClick={(e) => this.changePage(e, this.state.totalPages - 1)}/>
+                </Pagination>
+            </div>
             </div>
         )
     }

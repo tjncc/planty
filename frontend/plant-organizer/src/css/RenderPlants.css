@@ -1,8 +1,10 @@
 .renderAllPlants{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 3%;
 }
+
 
 .cardContainerAll{
     width: 230px;
@@ -16,6 +18,12 @@
     background-color: rgb(244, 250, 249);
 }
 
+.paginationPlants{
+    float: right;
+    margin: 0 10% 3% 0;
+}
+
+
 @media screen and (max-width: 1000px) {
     .renderAllPlants{
         flex-direction: column;
@@ -28,7 +36,12 @@
         display: flex;
         flex-direction: column;
         align-content: center;
-        margin-left: 16%;
+        margin-left: 2%;
+    }
+
+    .paginationPlants{
+        margin: 0 25% 3% 0;
+        
     }
 
 

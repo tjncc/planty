@@ -2,6 +2,7 @@ package plantorganizer.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.model.Plant;
@@ -91,6 +92,23 @@ public class PlantServiceImpl implements PlantService {
         modelMapper.map(plantDTO,plant);
         plantRepository.save(plant);
         return modelMapper.map(plant,PlantDTO.class);
+    }
+
+    @Override
+    public Page<PlantDTO> findPageable(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+        List<Plant> allPlants = plantRepository.findAll();
+        List<PlantDTO> plantDTOS = new ArrayList<>();
+
+        for (Plant plant: allPlants) {
+            PlantDTO plantDTO = modelMapper.map(plant,PlantDTO.class);
+            plantDTOS.add(plantDTO);
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), plantDTOS.size());
+
+        return new PageImpl<>(plantDTOS.subList(start, end), pageable, plantDTOS.size());
     }
 
 
