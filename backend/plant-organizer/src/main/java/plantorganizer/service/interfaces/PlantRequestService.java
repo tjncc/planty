@@ -1,7 +1,9 @@
 package plantorganizer.service.interfaces;
 
+import org.springframework.data.domain.Page;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.dto.PlantRequestDTO;
+import plantorganizer.helpers.RequestStatus;
 import plantorganizer.model.PlantRequest;
 
 import java.security.Principal;
@@ -15,4 +17,5 @@ public interface PlantRequestService {
     boolean approveRequest(long id);
     boolean declineRequest(long id);
     List<String> getWateringTime();
+    Page<PlantRequestDTO> findPageable(int page, int size, RequestStatus status);
 }

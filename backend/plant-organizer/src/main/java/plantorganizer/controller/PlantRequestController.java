@@ -1,6 +1,7 @@
 package plantorganizer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.dto.PlantRequestDTO;
+import plantorganizer.helpers.RequestStatus;
 import plantorganizer.service.interfaces.PlantRequestService;
 import plantorganizer.service.interfaces.PlantService;
 
@@ -86,6 +88,16 @@ public class PlantRequestController {
             return new ResponseEntity<>(values, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Error while loading.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(params = {"page","size", "status"})
+    public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size, @RequestParam RequestStatus status){
+        Page<PlantRequestDTO> plants = plantRequestService.findPageable(page,size,status);
+        if(plants != null){
+            return new ResponseEntity<>(plants, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plant requests cannot load", HttpStatus.BAD_REQUEST);
         }
     }
 

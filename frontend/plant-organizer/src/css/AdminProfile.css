@@ -1,0 +1,21 @@
+.mainDivAdminPrfl{
+    display: flex;
+    flex-direction: column;
+    padding: 1% 3%;
+}
+
+.flex-column{
+    background-color: rgb(235, 247, 247);
+    font-size: 20px;
+}
+
+.userTitle{
+    color: rgb(149, 169, 170);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-bottom: 13px;
+}
+
+h2{
+    color: rgb(99, 121, 122);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}

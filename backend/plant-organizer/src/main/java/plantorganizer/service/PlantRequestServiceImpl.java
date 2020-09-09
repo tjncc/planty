@@ -2,11 +2,14 @@ package plantorganizer.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.dto.PlantRequestDTO;
 import plantorganizer.helpers.RequestStatus;
 import plantorganizer.helpers.WateringTime;
+import plantorganizer.model.Plant;
 import plantorganizer.model.PlantRequest;
 import plantorganizer.model.User;
 import plantorganizer.repository.PlantRequestRepository;
@@ -74,12 +77,12 @@ public class PlantRequestServiceImpl implements PlantRequestService {
         if(request == null || !request.getRequestStatus().equals(RequestStatus.PENDING)){
             return false;
         }
-        PlantDTO plantDTO = modelMapper.map(request,PlantDTO.class);
+        NewPlantDTO plantDTO = modelMapper.map(request, NewPlantDTO.class);
         if(request.getCreator() != null) {
             plantDTO.setCreator(request.getCreator().getUsername());
         }
         request.setRequestStatus(RequestStatus.ACCEPTED);
-        plantService.save(plantDTO);
+        plantService.saveModel(plantDTO);
         return true;
     }
 
@@ -101,5 +104,23 @@ public class PlantRequestServiceImpl implements PlantRequestService {
             values.add(value.toString().toLowerCase());
         }
         return values;
+    }
+
+    @Override
+    public Page<PlantRequestDTO> findPageable(int page, int size, RequestStatus status) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+
+        List<PlantRequest> requests = plantRequestRepository.findAllByRequestStatus(status);
+        List<PlantRequestDTO> requestDTOS = new ArrayList<>();
+
+        for (PlantRequest request: requests) {
+            PlantRequestDTO requestDTO = modelMapper.map(request,PlantRequestDTO.class);
+            requestDTOS.add(requestDTO);
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), requestDTOS.size());
+
+        return new PageImpl<>(requestDTOS.subList(start, end), pageable, requestDTOS.size());
     }
 }

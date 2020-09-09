@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.model.Plant;
 import plantorganizer.model.User;
@@ -54,9 +55,17 @@ public class PlantServiceImpl implements PlantService {
         if(creator != null){
             plant.setCreator(creator);
         }
-        //creator.getPlants().add(plant);
         plantRepository.save(plant);
         return plantDTO;
+    }
+
+    public Plant saveModel(NewPlantDTO plantDto){
+        Plant plant = modelMapper.map(plantDto, Plant.class);
+        User creator = userService.findByUsername(plantDto.getCreator());
+        if(creator != null){
+            plant.setCreator(creator);
+        }
+        return plantRepository.save(plant);
     }
 
     @Override

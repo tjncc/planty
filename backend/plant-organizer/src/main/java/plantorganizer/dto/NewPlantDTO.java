@@ -2,27 +2,18 @@ package plantorganizer.dto;
 
 import plantorganizer.helpers.RequestStatus;
 import plantorganizer.helpers.WateringTime;
-import plantorganizer.model.PlantRequest;
 
-public class PlantRequestDTO {
-    private long id;
+public class NewPlantDTO {
+
     private String name;
     private String family;
     private WateringTime wateringTime;
     private String info;
-    private RequestStatus requestStatus;
     private String image;
+    private String creator;
 
-    public PlantRequestDTO(){
+    public NewPlantDTO(){
 
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -57,19 +48,19 @@ public class PlantRequestDTO {
         this.info = info;
     }
 
-    public RequestStatus getRequestStatus() {
-        return requestStatus;
-    }
-
-    public void setRequestStatus(RequestStatus requestStatus) {
-        this.requestStatus = requestStatus;
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 }

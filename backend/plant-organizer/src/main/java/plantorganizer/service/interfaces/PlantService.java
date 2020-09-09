@@ -1,6 +1,7 @@
 package plantorganizer.service.interfaces;
 
 import org.springframework.data.domain.Page;
+import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.model.Plant;
 
@@ -15,4 +16,5 @@ public interface PlantService {
     Boolean deletePlant(long id);
     PlantDTO updatePlant(long id, PlantDTO plantDTO);
     Page<PlantDTO> findPageable(int page, int size);
+    Plant saveModel(NewPlantDTO plantDTO);
 }
