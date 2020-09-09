@@ -5,6 +5,7 @@ import '../css/RenderPlantRequests.css'
 import planticon from '../icons/flower.svg'
 import newicon from '../icons/new.svg'
 import axios from 'axios'
+import { store } from 'react-notifications-component'
 
 class RenderPlantRequests extends React.Component {
     constructor(props) {
@@ -57,7 +58,21 @@ class RenderPlantRequests extends React.Component {
             console.log(request)
             axios.post(`${serviceConfig.baseURL}/plantrequest/accept`, request, options).then(
                     (response) => { 
-                        alert('Accepted!')
+                        store.addNotification({
+                            message: "Accepted successfully!",
+                            type: "success",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1000,
+                                pauseOnHover: true
+                              },
+                            onRemoval: () => {
+                                window.location.reload();
+                              },
+                          })
                     },
                     (response) => {alert('Error while accepting request.')}
             );
@@ -75,7 +90,21 @@ class RenderPlantRequests extends React.Component {
 
             axios.post(`${serviceConfig.baseURL}/plantrequest/decline`, request, options).then(
                     (response) => { 
-                        alert('Accepted!')
+                        store.addNotification({
+                            message: "Declined successfully!",
+                            type: "success",
+                            insert: "top",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 2000,
+                                pauseOnHover: true
+                              },
+                              onRemoval: () => {
+                                window.location.reload();
+                              },
+                          })
                     },
                     (response) => {alert('Error while accepting request.')}
             );

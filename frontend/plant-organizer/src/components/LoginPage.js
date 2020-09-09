@@ -3,6 +3,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal } from "r
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
 import '../css/Header.css'
+import { store } from 'react-notifications-component'
 
 class LoginPage extends React.Component{
     constructor(props){
@@ -38,9 +39,38 @@ class LoginPage extends React.Component{
                 };
 
                 window.location.href = "http://localhost:3000/"
-                alert('success') 
+                store.addNotification({
+                    title: "Welcome",
+                    message: "Logged in successfully!",
+                    type: "success",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                    onRemoval: () => {
+                        window.location.reload();
+                      },
+                  })
             },
-            (resp) => { alert('Username or password is incorrect!') }
+            (resp) => { 
+                store.addNotification({
+                    title: "Error",
+                    message: "Username or password is incorrect!",
+                    type: "danger",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                  })
+             }
         );
 
     }

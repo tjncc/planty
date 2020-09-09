@@ -4,6 +4,7 @@ import { serviceConfig } from '../appSettings.js'
 import '../css/AddPlant.css'
 import background from '../icons/bcgrnd.png'
 import axios from 'axios'
+import { store } from 'react-notifications-component'
 
 class AddPlant extends React.Component {
     constructor(props) {
@@ -48,29 +49,39 @@ class AddPlant extends React.Component {
                     (response) => { 
                         this.setState({ wateringValues: response.data, wateringTime: response.data[0]});
                     },
-                    (response) => {alert('Error while loading watering values.')}
+                    (response) => {
+                        store.addNotification({
+                            title: "Error",
+                            message: "Cannot load watering time.",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                          })
+                    }
             );
         }
     }
 
-    handleImageUpload(e) {
-        
+    handleImageUpload(e) {   
         e.preventDefault();
-    if(e.target.files[0] !== undefined){
-        let reader = new FileReader();
-        let file = e.target.files[0];
-
+        if(e.target.files[0] !== undefined){
+            let reader = new FileReader();
+            let file = e.target.files[0];    
+            
+            reader.onload = () => {
+            this.setState({
+                file: file,
+                image: reader.result
+            });
+            }
         
-        
-        reader.onload = () => {
-          this.setState({
-            file: file,
-            image: reader.result
-          });
-        }
-    
-        reader.readAsDataURL(file)
-
+            reader.readAsDataURL(file)
         }
       }
 
@@ -98,9 +109,41 @@ class AddPlant extends React.Component {
             
             axios.post(`${serviceConfig.baseURL}/plantrequest`, plant, options).then(
                     (response) => { 
-                        alert('Successful added!');
+                        store.addNotification({
+                            title: "Successfully added",
+                            message: "Admin will review your plant request soon.",
+                            type: "success",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                            onRemoval: () => {
+                                window.location.reload();
+                              },
+                          })
                     },
-                    (response) => {alert('Error while adding new plant.')}
+                    (response) => {
+                        store.addNotification({
+                            title: "Error",
+                            message: "Something gone wrong while creating plant.",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                            onRemoval: () => {
+                                window.location.reload();
+                              },
+                          })
+                    }
             );
         }
     }

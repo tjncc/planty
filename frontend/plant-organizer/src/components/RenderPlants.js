@@ -5,6 +5,7 @@ import '../css/RenderPlants.css'
 import planticon from '../icons/flower.svg'
 import newicon from '../icons/new.svg'
 import axios from 'axios'
+import { store } from 'react-notifications-component'
 
 class RenderPlants extends React.Component {
     constructor(props) {
@@ -39,9 +40,22 @@ class RenderPlants extends React.Component {
                             totalPages: response.data.totalPages,
                             pageNumber: response.data.pageable.pageNumber 
                         });
-                        console.log(response.data)
                     },
-                    (response) => {alert('Error while loading plants.')}
+                    (response) => {
+                        store.addNotification({
+                            title: "Error",
+                            message: "Something gone wrong while loading plants!",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                          })
+                    }
             );
         
     }

@@ -6,6 +6,7 @@ import plant from '../icons/flower.svg'
 import newicon from '../icons/new.svg'
 import RenderPlants from './RenderPlants'
 import axios from 'axios'
+import { store } from 'react-notifications-component'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -36,7 +37,20 @@ class HomePage extends React.Component {
                     (response) => { 
                         this.setState({ user: response.data, isLoggedIn: true });
                     },
-                    (response) => {alert('Please log in.')}
+                    (response) => {
+                        store.addNotification({
+                            message: "Please log in!",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                          })
+                    }
             );
         }
 

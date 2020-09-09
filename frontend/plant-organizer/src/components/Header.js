@@ -7,6 +7,7 @@ import usericon from '../icons/user.svg'
 import Login from './LoginPage'
 import Register from './RegisterPage'
 import axios from 'axios'
+import { store } from 'react-notifications-component'
 
 class Header extends React.Component {
     constructor(props) {
@@ -43,7 +44,20 @@ class Header extends React.Component {
                         this.setState({ user: response.data, isLoggedIn: true});
                         console.log(this.state) 
                     },
-                    (response) => {alert('Please log in.')}
+                    (response) => {
+                        store.addNotification({
+                            message: "Please log in!",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                          })
+                    }
             );
         }
 

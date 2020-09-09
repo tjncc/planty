@@ -3,7 +3,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel,Col, Modal } from "r
 import '../css/Header.css'
 import {serviceConfig} from '../appSettings.js'
 import axios from 'axios'
-
+import { store } from 'react-notifications-component'
 
 class RegisterPage extends React.Component{
     constructor(props){
@@ -50,10 +50,39 @@ class RegisterPage extends React.Component{
 
             axios.post(`${serviceConfig.baseURL}/auth/register`,this.state).then(
                 (resp) => { 
-                    alert('success')
-                    window.location.href = "http://localhost:3000/" 
+                    store.addNotification({
+                        title: "Successfully registered",
+                        message: "You can log in now.",
+                        type: "success",
+                        insert: "right",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 1600,
+                            pauseOnHover: true
+                          },
+                        onRemoval: () => {
+                            window.location.href = "http://localhost:3000/" 
+                          },
+                      })
+                    
                 },
-                (resp) => { alert('error') }
+                (resp) => {
+                    store.addNotification({
+                        title: "Error",
+                        message: "Something gone wrong while registering.",
+                        type: "danger",
+                        insert: "right",
+                        container: "top-right",
+                        animationIn: ["animated", "fadeIn"],
+                        animationOut: ["animated", "fadeOut"],
+                        dismiss: {
+                            duration: 1600,
+                            pauseOnHover: true
+                          },
+                      })
+                 }
             );
 
         }

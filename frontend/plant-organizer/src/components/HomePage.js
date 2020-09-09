@@ -36,7 +36,7 @@ class HomePage extends React.Component {
                     (response) => { 
                         this.setState({ user: response.data, isLoggedIn: true });
                     },
-                    (response) => {alert('Please log in.')}
+                    (response) => { }
             );
         }
 
