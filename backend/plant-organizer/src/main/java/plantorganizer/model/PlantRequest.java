@@ -31,7 +31,7 @@ public class PlantRequest {
     @Column(columnDefinition="text", length=10485760)
     private String image;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
 

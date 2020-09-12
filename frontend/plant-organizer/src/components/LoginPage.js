@@ -48,7 +48,7 @@ class LoginPage extends React.Component{
                     animationIn: ["animated", "fadeIn"],
                     animationOut: ["animated", "fadeOut"],
                     dismiss: {
-                        duration: 1600,
+                        duration: 2000,
                         pauseOnHover: true
                       },
                     onRemoval: () => {

@@ -1,6 +1,9 @@
 package plantorganizer.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import plantorganizer.dto.UserDTO;
+import plantorganizer.dto.UserUpdateDTO;
 import plantorganizer.helpers.Role;
 import plantorganizer.helpers.TimeProvider;
 import plantorganizer.model.Authority;
@@ -34,6 +37,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     AuthorityService authorityService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -73,6 +79,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setLastPasswordResetDate(timestamp);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDTO update(UserUpdateDTO userDTO) {
+        User user = findByUsername(userDTO.getOldUsername());
+
+        if( (findByUsername(userDTO.getUsername()) != null) && (userDTO.getUsername() != user.getUsername())
+        && ( (findByEmail(userDTO.getEmail()) != null) && (userDTO.getEmail() != user.getEmail())) ) {
+            return null;
+        }
+
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        userRepository.save(user);
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override

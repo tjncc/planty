@@ -1,0 +1,43 @@
+.mainDivProfile{
+    display: flex;
+    flex-direction: row;
+    margin: 2%;
+}
+
+.div1Profile{
+    width: 20%;
+    margin-right: 4%;
+    border: 1px solid rgb(126, 150, 147);
+    padding: 1% 1%;
+    height: min-content;
+}
+
+.div2Profile{
+    width: 80%;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgb(62, 87, 87);
+    text-align: center;
+}
+
+
+@media screen and (max-width: 900px) {
+    .div1Profile{
+        width: 35%;
+    }
+
+    .div2Profile{
+        width: 65%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .mainDivProfile{
+        display: flex;
+        flex-direction: column;
+        margin: 2%;
+    }
+
+    .div2Profile, .div1Profile{
+        width: 100%;
+    }
+}

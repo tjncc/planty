@@ -139,7 +139,7 @@ class RegisterPage extends React.Component{
 
                     <Form.Group as={Col} style={{marginRight: "15px"}}>
                         <Form.Label>Repeat password:</Form.Label>
-                        <Form.Control type="password" style={{background: "rgb(244, 245, 249)"}} placeholder="Repeat your password" id="repeatedPassword" name="repeatedPassword" onChange={this.handleChange} required/>
+                        <Form.Control type="password" style={{background: "rgb(250, 255, 255)"}} placeholder="Repeat your password" id="repeatedPassword" name="repeatedPassword" onChange={this.handleChange} required/>
                     </Form.Group>
                 </Form.Row>
 

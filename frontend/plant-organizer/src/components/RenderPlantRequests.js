@@ -32,7 +32,7 @@ class RenderPlantRequests extends React.Component {
             const options = {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
-            console.log(this.props.content)
+
             axios.get(`${serviceConfig.baseURL}/plantrequest?page=${this.state.pageNumber}&size=${this.state.size}&status=${this.props.content}`, options).then(
                     (response) => { 
                         this.setState({ 

@@ -1,8 +1,14 @@
 package plantorganizer.model;
 
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import plantorganizer.helpers.WateringTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Plant {
@@ -27,9 +33,12 @@ public class Plant {
     @Column(columnDefinition="text", length=10485760)
     private String image;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+
+    @ManyToMany(mappedBy = "plantCollection")
+    private Set<User> users;
 
     public Plant(){
 
@@ -89,5 +98,13 @@ public class Plant {
 
     public void setCreator(User creator) {
         this.creator = creator;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

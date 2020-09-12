@@ -93,6 +93,51 @@ class HomePage extends React.Component {
         );
     }
 
+    deletePlant(){
+        
+        let token = localStorage.getItem('token');
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.delete(`${serviceConfig.baseURL}/plant/${this.props.id}`, options).then(
+            (resp) => {
+                store.addNotification({
+                    title: "Successfully deleted!",
+                    message: "Plant is deleted.",
+                    type: "success",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        pauseOnHover: true
+                      },
+                      onRemoval: () => {
+                        window.location.href = "http://localhost:3000/" 
+                      },
+                  })
+                
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Unsuccessful removing plant.",
+                    type: "danger",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                  })
+            }
+        );
+    }
+
 
     changePath(path){
             window.location.href=`http://localhost:3000/${path}`
@@ -114,7 +159,11 @@ class HomePage extends React.Component {
                 <br />
                 <label className="plantInfo1">More info:</label>
                 <label className="plantInfo">{this.state.plant.info}</label>
+                <br />
+                <label className="plantInfo1">Creator:</label>
+                <label className="plantInfo">{this.state.plant.creator}</label>
                 </div>
+                
 
                 <div className="div3PlantView">
                 {
@@ -122,8 +171,8 @@ class HomePage extends React.Component {
                     <button className="userLikeBtn">Add to my collection</button>
                 }
                 {
-                    this.state.user.role === "ADMIN" &&
-                    <button className="userLikeBtn">Delete</button>
+                    (this.state.user.role === "ADMIN" || this.state.user.username === this.state.plant.creator) &&
+                    <button onClick={this.deletePlant.bind(this)} className="userLikeBtn">Delete</button>
                 }
                 </div>
             </div>

@@ -22,6 +22,7 @@ class RenderPlants extends React.Component {
     }
 
     componentDidMount(){
+
         this.getAllPlants();
     }
 
@@ -33,7 +34,57 @@ class RenderPlants extends React.Component {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
 
-            axios.get(`${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`, options).then(
+            var sizePage = 6;
+
+            if(this.props.content === "COLLECTION"){
+                var urlPath = `${serviceConfig.baseURL}/plant/liked?page=${this.state.pageNumber}&size=${sizePage}`
+            }
+            else if (this.props.content === "MYPLANTS"){
+                var urlPath = `${serviceConfig.baseURL}/plant/my?page=${this.state.pageNumber}&size=${sizePage}`
+            }
+            else if (this.props.content === "MYREQUESTS"){
+                var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`
+            }
+            else {
+                var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`
+            } 
+
+            axios.get(urlPath, options).then(
+                    (response) => { 
+                        this.setState({ 
+                            plants: response.data.content,
+                            totalPages: response.data.totalPages,
+                            pageNumber: response.data.pageable.pageNumber 
+                        });
+                    },
+                    (response) => {
+                        store.addNotification({
+                            title: "Error",
+                            message: "Something gone wrong while loading plants!",
+                            type: "danger",
+                            insert: "right",
+                            container: "top-right",
+                            animationIn: ["animated", "fadeIn"],
+                            animationOut: ["animated", "fadeOut"],
+                            dismiss: {
+                                duration: 1600,
+                                pauseOnHover: true
+                              },
+                          })
+                    }
+            );
+        
+    }
+
+    getAllPlantsFromCollection(){
+        let token = localStorage.getItem('token');
+        let self = this;
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+            axios.get(`${serviceConfig.baseURL}/plant/liked/?page=${this.state.pageNumber}&size=${this.state.size}`, options).then(
                     (response) => { 
                         this.setState({ 
                             plants: response.data.content,

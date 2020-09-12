@@ -4,6 +4,7 @@ import plantorganizer.model.User;
 
 public class UserDTO {
 
+    private long id;
     private String username;
     private String email;
     private String role;
@@ -16,6 +17,14 @@ public class UserDTO {
         this.username = username;
         this.email = email;
         this.role = role;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public UserDTO(User user){

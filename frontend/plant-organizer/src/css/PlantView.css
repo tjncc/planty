@@ -60,5 +60,15 @@
     height: 10%;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     color: rgb(77, 106, 107);
+    margin-bottom: 3%;
 }
 
+@media screen and (max-width: 1000px) {
+    .mainDivPlantView{
+        display: flex;
+        flex-direction: column;
+    }
+    .div1PlantView, .div2PlantView, .div3PlantView{
+        width: 100%;
+    }
+}

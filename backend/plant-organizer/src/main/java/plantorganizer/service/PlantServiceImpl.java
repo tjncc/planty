@@ -12,6 +12,7 @@ import plantorganizer.repository.PlantRepository;
 import plantorganizer.service.interfaces.PlantService;
 import plantorganizer.service.interfaces.UserService;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,12 @@ public class PlantServiceImpl implements PlantService {
         if(plant == null){
             return null;
         }
-        return modelMapper.map(plant, PlantDTO.class);
+
+        PlantDTO plantDto = modelMapper.map(plant, PlantDTO.class);
+        if(plant.getCreator() != null){
+            plantDto.setCreator(plant.getCreator().getUsername());
+        }
+        return plantDto;
     }
 
     @Override
@@ -67,6 +73,54 @@ public class PlantServiceImpl implements PlantService {
         }
         return plantRepository.save(plant);
     }
+
+    @Override
+    public Page<PlantDTO> findAllLikedByUser(int page, int size, Principal principal) {
+        List<Plant> plants = plantRepository.findAll();
+        List<Plant> liked = new ArrayList<>();
+
+        for (Plant p: plants) {
+            for(User user : p.getUsers()){
+                if(user.getUsername().equals(principal.getName())){
+                    liked.add(p);
+                }
+            }
+        }
+        return implementPagination(liked, page, size);
+    }
+
+    @Override
+    public Page<PlantDTO> implementPagination(List<Plant> allPlants, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+        List<PlantDTO> plantDTOS = new ArrayList<>();
+
+        for (Plant plant: allPlants) {
+            PlantDTO plantDTO = modelMapper.map(plant,PlantDTO.class);
+            if(plant.getCreator() != null){
+                plantDTO.setCreator(plant.getCreator().getUsername());
+            }
+            plantDTOS.add(plantDTO);
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), plantDTOS.size());
+
+        return new PageImpl<>(plantDTOS.subList(start, end), pageable, plantDTOS.size());
+    }
+
+    @Override
+    public Page<PlantDTO> findAllMyPlants(int page, int size, Principal principal) {
+        List<Plant> plants = plantRepository.findAll();
+        List<Plant> liked = new ArrayList<>();
+
+        for (Plant p: plants) {
+            if(p.getCreator().getUsername().equals(principal.getName())){
+                liked.add(p);
+            }
+        }
+        return implementPagination(liked, page, size);
+    }
+
 
     @Override
     public List<PlantDTO> findAll() {

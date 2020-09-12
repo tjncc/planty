@@ -43,6 +43,7 @@ class Header extends React.Component {
                     (response) => { 
                         this.setState({ user: response.data, isLoggedIn: true});
                         console.log(this.state) 
+
                     },
                     (response) => {
                         store.addNotification({

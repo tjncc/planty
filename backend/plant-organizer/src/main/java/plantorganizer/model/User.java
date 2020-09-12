@@ -1,5 +1,7 @@
 package plantorganizer.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import plantorganizer.helpers.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,9 +9,7 @@ import plantorganizer.repository.PlantRepository;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -46,7 +46,14 @@ public class User implements UserDetails {
     private List<PlantRequest> plantRequests = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Plant> plants = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @JoinTable(name = "user_plants",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "plant_id", referencedColumnName = "id"))
+    private Set<Plant> plantCollection = new HashSet<>();
 
     public User() {
         super();
@@ -150,5 +157,13 @@ public class User implements UserDetails {
 
     public void setPlants(List<Plant> plants) {
         this.plants = plants;
+    }
+
+    public Set<Plant> getPlantCollection() {
+        return plantCollection;
+    }
+
+    public void setPlantCollection(Set<Plant> plantCollection) {
+        this.plantCollection = plantCollection;
     }
 }

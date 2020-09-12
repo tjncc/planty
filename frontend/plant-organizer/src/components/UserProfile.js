@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card } from "react-bootstrap"
+import { Button, Card, Nav, Col, Tab,Tabs, Row } from "react-bootstrap"
 import { serviceConfig } from '../appSettings.js'
 import '../css/UserProfile.css'
 import plant from '../icons/flower.svg'
@@ -7,6 +7,7 @@ import newicon from '../icons/new.svg'
 import RenderPlants from './RenderPlants'
 import axios from 'axios'
 import { store } from 'react-notifications-component'
+import UserUpdate from './UserUpdate'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -64,8 +65,30 @@ class HomePage extends React.Component {
 
     render(){
         return(
-            <div className="mainDiv">
-                <h2>Hi {this.state.user.username}</h2>
+            <div className="mainDivProfile">
+                <div className="div1Profile">
+                    <div>
+                    {
+                        this.state.user.username !== undefined &&
+                        <UserUpdate content={this.state.user}/>
+                    }
+                    </div>
+                </div>
+
+                <div className="div2Profile">
+                    <h2>Your plants</h2>
+                    <Tabs defaultActiveKey="first" transition={false} id="noanim-tab-example">
+                        <Tab eventKey="first" title="Collection">
+                           <RenderPlants content={"COLLECTION"} />
+                        </Tab>
+                        <Tab eventKey="second" title="My plants">
+                            <RenderPlants content={"MYPLANTS"} />
+                        </Tab>
+                        <Tab eventKey="third" title="My requests">
+                        <RenderPlants content={"MYREQUESTS"} />
+                        </Tab>
+                    </Tabs>
+                </div>
             </div>
         )
     }

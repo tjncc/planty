@@ -16,6 +16,7 @@ import plantorganizer.security.TokenUtils;
 import plantorganizer.security.auth.JwtAuthenticationRequest;
 import plantorganizer.service.interfaces.UserService;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 
 @RestController
@@ -70,7 +71,7 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value="/{id}")
+    @GetMapping("role")
     public ResponseEntity<?> getUser(Principal p){
         User user = userService.findByUsername(p.getName());
 

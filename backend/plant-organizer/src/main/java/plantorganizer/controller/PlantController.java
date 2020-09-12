@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.RouteMatcher;
 import org.springframework.web.bind.annotation.*;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.security.auth.JwtAuthenticationRequest;
 import plantorganizer.service.interfaces.PlantService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -42,16 +44,6 @@ public class PlantController {
         }
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<?> getPlantByName(@PathVariable String name){
-        PlantDTO plant = plantService.findByName(name);
-        if(plant != null){
-            return new ResponseEntity<>(plant, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Plant cannot be found", HttpStatus.NOT_FOUND);
-        }
-    }
-
     @GetMapping(params = {"page","size"})
     public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size){
         Page<PlantDTO> plants = plantService.findPageable(page,size);
@@ -78,6 +70,26 @@ public class PlantController {
             return new ResponseEntity<>(plant,HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = {"liked"}, params = {"page","size"})
+    public ResponseEntity<?> getAllLikedPlants(@RequestParam int page, @RequestParam int size, Principal principal){
+        Page<PlantDTO> plants = plantService.findAllLikedByUser(page, size, principal);
+        if(plants != null){
+            return new ResponseEntity<>(plants, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plants cannot load", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = {"my"}, params = {"page","size"})
+    public ResponseEntity<?> getAllMyPlants(@RequestParam int page, @RequestParam int size, Principal principal){
+        Page<PlantDTO> plants = plantService.findAllMyPlants(page, size, principal);
+        if(plants != null){
+            return new ResponseEntity<>(plants, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plants cannot load", HttpStatus.BAD_REQUEST);
         }
     }
 }
