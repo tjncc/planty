@@ -12,9 +12,11 @@ class RenderPlants extends React.Component {
         super(props);
 
         this.renderCards = this.renderCards.bind(this);
+        this.renderCardsRequests = this.renderCardsRequests.bind(this);
 
         this.state = {
             plants: [],
+            requests: [],
             totalPages: 0,
             pageNumber: 0,
             size: 8,
@@ -43,7 +45,8 @@ class RenderPlants extends React.Component {
                 var urlPath = `${serviceConfig.baseURL}/plant/my?page=${this.state.pageNumber}&size=${sizePage}`
             }
             else if (this.props.content === "MYREQUESTS"){
-                var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`
+                this.getAllRequests();
+                return;
             }
             else {
                 var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`
@@ -76,7 +79,7 @@ class RenderPlants extends React.Component {
         
     }
 
-    getAllPlantsFromCollection(){
+    getAllRequests(){
         let token = localStorage.getItem('token');
         let self = this;
   
@@ -84,10 +87,13 @@ class RenderPlants extends React.Component {
                 headers: { 'Authorization': 'Bearer ' + token}
             };
 
-            axios.get(`${serviceConfig.baseURL}/plant/liked/?page=${this.state.pageNumber}&size=${this.state.size}`, options).then(
+            var sizePage = 4;
+
+            axios.get(`${serviceConfig.baseURL}/plantrequest/my?page=${this.state.pageNumber}&size=${sizePage}`, options).then(
                     (response) => { 
+                        console.log(response.data)
                         this.setState({ 
-                            plants: response.data.content,
+                            requests: response.data.content,
                             totalPages: response.data.totalPages,
                             pageNumber: response.data.pageable.pageNumber 
                         });
@@ -95,7 +101,7 @@ class RenderPlants extends React.Component {
                     (response) => {
                         store.addNotification({
                             title: "Error",
-                            message: "Something gone wrong while loading plants!",
+                            message: "Something gone wrong while loading requests!",
                             type: "danger",
                             insert: "right",
                             container: "top-right",
@@ -168,13 +174,65 @@ class RenderPlants extends React.Component {
     }   
     }
 
+    renderCardsRequests(){
+        if(this.state.requests.length > 0){
+            return this.state.requests.map((plant, index) => {
+
+                return(
+                    <div className="cardDivRequests">
+                        <Card key={plant.id} className="cardContainerAllReqs" >
+                            <Card.Title className="cardHeaderReqs" style={{fontSize: "27px", padding: "2% 0"}}>{plant.name}</Card.Title>
+    
+                            <Card.Body className = "cardBodyAllReqs">
+    
+                                <div className="cardBodyMaindiv">
+                                    <div className="cardBody1div">
+                                    <label style={{color: "rgb(176,47,99)"}}>Request status:</label>
+                                        <label>Family:</label>
+                                        <label>Watering time:</label>
+                                        <label>Info:</label>
+                                    </div>
+                                    <div className="cardBody2div">
+                                    <label style={{color: "rgb(176,47,99)"}}>{plant.requestStatus}</label>
+                                        <label>{plant.family}</label>
+                                        <label>{plant.wateringTime}</label>
+                                        <label>{plant.info}</label>
+                                    </div>
+    
+                                </div>
+    
+                            </Card.Body>
+                            <Card.Img variant="bottom"  style={{maxHeight: "200px", maxWidth: "200px", margin: "2% auto"}} src={plant.image} />
+                            {
+                                plant.image === "" &&
+                                <Card.Img variant="bottom" style={{padding: '80px', backgroundColor: 'rgb(244, 250, 249)'}} src={planticon} /> 
+                            }
+    
+                    </Card>
+                </div>
+                )
+                
+                
+            }) 
+    }   
+    }
+
 
     render(){
         return(
             <div>
-            <div className="renderAllPlants">
-                {this.renderCards()}
-                </div>
+                {
+                    this.props.content === "MYREQUESTS" &&
+                    <div className="renderAllPlants">
+                    {this.renderCardsRequests()}
+                    </div>
+                }
+                {
+                    this.props.content !== "MYREQUESTS" &&
+                    <div className="renderAllPlants">
+                    {this.renderCards()}
+                    </div>
+                }
                 <div>
                 <Pagination className="paginationPlants">
                     <Pagination.First onClick={(e) => this.changePage(e, 0)}/>

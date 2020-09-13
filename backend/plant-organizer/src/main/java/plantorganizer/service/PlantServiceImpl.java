@@ -109,6 +109,12 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
+    public Page<PlantDTO> findPageable(int page, int size) {
+        List<Plant> allPlants = plantRepository.findAll();
+        return implementPagination(allPlants,page,size);
+    }
+
+    @Override
     public Page<PlantDTO> findAllMyPlants(int page, int size, Principal principal) {
         List<Plant> plants = plantRepository.findAll();
         List<Plant> liked = new ArrayList<>();
@@ -119,6 +125,46 @@ public class PlantServiceImpl implements PlantService {
             }
         }
         return implementPagination(liked, page, size);
+    }
+
+    @Override
+    public boolean addToCollection(Principal principal, long id) {
+        Plant plant = plantRepository.findById(id);
+        User user = userService.findByUsername(principal.getName());
+
+        if(user.getPlantCollection().contains(plant)){
+            return false;
+        }
+        user.getPlantCollection().add(plant);
+        userService.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean removeFromCollection(Principal principal, long id) {
+        Plant plant = plantRepository.findById(id);
+        User user = userService.findByUsername(principal.getName());
+
+        if(!user.getPlantCollection().contains(plant)){
+            return false;
+        }
+        user.getPlantCollection().remove(plant);
+        userService.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean isLiked(Principal principal, long id) {
+        Plant plant = plantRepository.findById(id);
+        if(principal == null){
+            return false;
+        }
+        User user = userService.findByUsername(principal.getName());
+
+        if(plant.getUsers().contains(user)){
+            return true;
+        }
+        return false;
     }
 
 
@@ -156,23 +202,4 @@ public class PlantServiceImpl implements PlantService {
         plantRepository.save(plant);
         return modelMapper.map(plant,PlantDTO.class);
     }
-
-    @Override
-    public Page<PlantDTO> findPageable(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
-        List<Plant> allPlants = plantRepository.findAll();
-        List<PlantDTO> plantDTOS = new ArrayList<>();
-
-        for (Plant plant: allPlants) {
-            PlantDTO plantDTO = modelMapper.map(plant,PlantDTO.class);
-            plantDTOS.add(plantDTO);
-        }
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), plantDTOS.size());
-
-        return new PageImpl<>(plantDTOS.subList(start, end), pageable, plantDTOS.size());
-    }
-
-
 }

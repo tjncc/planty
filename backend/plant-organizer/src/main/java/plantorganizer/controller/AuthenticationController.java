@@ -67,7 +67,7 @@ public class AuthenticationController {
             return new ResponseEntity<>("Username or email is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        userService.save(user);
+        userService.saveNew(user);
         return ResponseEntity.ok().build();
     }
 

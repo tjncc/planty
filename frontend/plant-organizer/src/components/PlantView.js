@@ -15,13 +15,15 @@ class HomePage extends React.Component {
         this.state = {
             user: [],
             isLoggedIn: false,
-            plant: []
+            plant: [],
+            isLiked: false,
         }
     }
 
     componentDidMount(){
         this.getRole();
         this.getPlant();
+        this.checkPlant();
     }
 
     getRole(){
@@ -138,6 +140,102 @@ class HomePage extends React.Component {
         );
     }
 
+    checkPlant() {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/plant/check/${this.props.id}`, options).then(
+            (resp) => {
+                this.setState({
+                    isLiked: resp.data               
+                })
+                console.log(this.state.isLiked)
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Cannot load plant.",
+                    type: "danger",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                  })
+            }
+        );
+    }
+
+    addToCollection() {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/plant/like/${this.props.id}`, options).then(
+            (resp) => {
+                this.setState({
+                    isLiked: true               
+                })
+                console.log(this.state.isLiked)
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Cannot load plant.",
+                    type: "danger",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                  })
+            }
+        );
+    }
+
+    removeFromCollection() {
+        let token = localStorage.getItem('token');
+
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + token }
+        };
+
+        axios.get(`${serviceConfig.baseURL}/plant/dislike/${this.props.id}`, options).then(
+            (resp) => {
+                this.setState({
+                    isLiked: false               
+                })
+                console.log(this.state.isLiked)
+            },
+            (resp) => {
+                store.addNotification({
+                    title: "Error",
+                    message: "Cannot load plant.",
+                    type: "danger",
+                    insert: "right",
+                    container: "top-right",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 1600,
+                        pauseOnHover: true
+                      },
+                  })
+            }
+        );
+    }
+
 
     changePath(path){
             window.location.href=`http://localhost:3000/${path}`
@@ -167,8 +265,12 @@ class HomePage extends React.Component {
 
                 <div className="div3PlantView">
                 {
-                    this.state.user.role === "USER" &&
-                    <button className="userLikeBtn">Add to my collection</button>
+                    this.state.user.role === "USER" && !this.state.isLiked &&
+                    <button className="userLikeBtn" onClick={this.addToCollection.bind(this)}>Add to my collection</button>
+                }
+                                {
+                    this.state.user.role === "USER" && this.state.isLiked &&
+                    <button className="userLikeBtn" onClick={this.removeFromCollection.bind(this)}>Remove from my collection</button>
                 }
                 {
                     (this.state.user.role === "ADMIN" || this.state.user.username === this.state.plant.creator) &&

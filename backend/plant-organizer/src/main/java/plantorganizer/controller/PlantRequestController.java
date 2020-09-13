@@ -101,5 +101,13 @@ public class PlantRequestController {
         }
     }
 
-
+    @GetMapping(value = {"my"}, params = {"page","size"})
+    public ResponseEntity<?> getAllRequestsByCreator(@RequestParam int page, @RequestParam int size, Principal principal){
+        Page<PlantRequestDTO> plants = plantRequestService.findRequestsByCreator(principal, page, size);
+        if(plants != null){
+            return new ResponseEntity<>(plants, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plant requests cannot load", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

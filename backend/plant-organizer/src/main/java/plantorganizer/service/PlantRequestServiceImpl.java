@@ -111,6 +111,12 @@ public class PlantRequestServiceImpl implements PlantRequestService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
 
         List<PlantRequest> requests = plantRequestRepository.findAllByRequestStatus(status);
+        return implementPagination(requests, page, size);
+    }
+
+    @Override
+    public Page<PlantRequestDTO> implementPagination(List<PlantRequest> requests, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
         List<PlantRequestDTO> requestDTOS = new ArrayList<>();
 
         for (PlantRequest request: requests) {
@@ -122,5 +128,12 @@ public class PlantRequestServiceImpl implements PlantRequestService {
         int end = Math.min((start + pageable.getPageSize()), requestDTOS.size());
 
         return new PageImpl<>(requestDTOS.subList(start, end), pageable, requestDTOS.size());
+    }
+
+    @Override
+    public Page<PlantRequestDTO> findRequestsByCreator(Principal principal, int page, int size) {
+        User user = userService.findByUsername(principal.getName());
+        List<PlantRequest> requests = plantRequestRepository.findByCreator(user);
+        return implementPagination(requests, page, size);
     }
 }

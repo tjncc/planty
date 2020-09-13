@@ -21,4 +21,7 @@ public interface PlantService {
     Page<PlantDTO> findAllLikedByUser(int page, int size, Principal principal);
     Page<PlantDTO> implementPagination(List<Plant> plants, int page, int size);
     Page<PlantDTO> findAllMyPlants(int page, int size, Principal principal);
+    boolean addToCollection(Principal principal, long id);
+    boolean removeFromCollection(Principal principal, long id);
+    boolean isLiked(Principal principal, long id);
 }

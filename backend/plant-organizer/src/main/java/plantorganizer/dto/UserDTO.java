@@ -13,7 +13,8 @@ public class UserDTO {
 
     }
 
-    public UserDTO(String username, String email, String role) {
+    public UserDTO(long id, String username, String email, String role) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
@@ -28,7 +29,7 @@ public class UserDTO {
     }
 
     public UserDTO(User user){
-        this(user.getUsername(), user.getEmail(), user.getRole().toString());
+        this(user.getId(), user.getUsername(), user.getEmail(), user.getRole().toString());
     }
 
     public String getUsername() {

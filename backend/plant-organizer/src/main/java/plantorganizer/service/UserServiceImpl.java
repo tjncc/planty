@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User save(User user) {
+    public User saveNew(User user) {
         user.setRole(Role.USER);
 
         Authority authority = authorityService.findByName(Role.USER.toString());
@@ -78,6 +78,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         user.setLastPasswordResetDate(timestamp);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User save(User user) {
         return userRepository.save(user);
     }
 

@@ -11,6 +11,7 @@ public interface UserService {
     UserDetails loadUserByUsername(String username);
     User findByEmail(String email);
     User findById(Long id);
+    User saveNew(User user);
     User save(User user);
     UserDTO update(UserUpdateDTO userDTO);
 }

@@ -92,4 +92,31 @@ public class PlantController {
             return new ResponseEntity<>("Plants cannot load", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value={"like/{id}"})
+    public ResponseEntity<?> addPlantToCollection(@PathVariable String id, Principal principal){
+        boolean isLiked = plantService.addToCollection(principal, Long.parseLong(id));
+        if(isLiked){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plant is not added to collection.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value={"dislike/{id}"})
+    public ResponseEntity<?> removePlantToCollection(@PathVariable String id, Principal principal){
+        boolean isLiked = plantService.removeFromCollection(principal, Long.parseLong(id));
+        if(isLiked){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Plant is not removed from collection.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value={"check/{id}"})
+    public ResponseEntity<?> checkPlant(@PathVariable String id, Principal principal){
+        boolean isLiked = plantService.isLiked(principal, Long.parseLong(id));
+        return new ResponseEntity<>(isLiked, HttpStatus.OK);
+    }
+
 }
