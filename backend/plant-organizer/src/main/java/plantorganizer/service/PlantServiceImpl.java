@@ -40,6 +40,7 @@ public class PlantServiceImpl implements PlantService {
         if(plant.getCreator() != null){
             plantDto.setCreator(plant.getCreator().getUsername());
         }
+        plantDto.setLikes(plant.getUsers().size());
         return plantDto;
     }
 
@@ -75,14 +76,20 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Page<PlantDTO> findAllLikedByUser(int page, int size, Principal principal) {
+    public Page<PlantDTO> findAllLikedByUser(int page, int size, String search, Principal principal) {
         List<Plant> plants = plantRepository.findAll();
         List<Plant> liked = new ArrayList<>();
 
         for (Plant p: plants) {
             for(User user : p.getUsers()){
                 if(user.getUsername().equals(principal.getName())){
-                    liked.add(p);
+                    if(search != ""){
+                        if(p.getName().toLowerCase().contains(search.toLowerCase()) || p.getFamily().toLowerCase().contains(search.toLowerCase())){
+                            liked.add(p);
+                        }
+                    } else {
+                        liked.add(p);
+                    }
                 }
             }
         }
@@ -109,48 +116,64 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public Page<PlantDTO> findPageable(int page, int size) {
+    public Page<PlantDTO> findPageable(int page, int size, String search) {
         List<Plant> allPlants = plantRepository.findAll();
-        return implementPagination(allPlants,page,size);
+        List<Plant> searchedPlants = new ArrayList<>();
+        if (search != "") {
+            for (Plant p: allPlants) {
+                if(p.getName().toLowerCase().contains(search.toLowerCase()) || p.getFamily().toLowerCase().contains(search.toLowerCase())){
+                    searchedPlants.add(p);
+                }
+            }
+        } else {
+            searchedPlants = allPlants;
+        }
+        return implementPagination(searchedPlants,page,size);
     }
 
     @Override
-    public Page<PlantDTO> findAllMyPlants(int page, int size, Principal principal) {
+    public Page<PlantDTO> findAllMyPlants(int page, int size, String search, Principal principal) {
         List<Plant> plants = plantRepository.findAll();
-        List<Plant> liked = new ArrayList<>();
+        List<Plant> myPlants = new ArrayList<>();
 
         for (Plant p: plants) {
             if(p.getCreator().getUsername().equals(principal.getName())){
-                liked.add(p);
+                if(search != ""){
+                    if(p.getName().toLowerCase().contains(search.toLowerCase()) || p.getFamily().toLowerCase().contains(search.toLowerCase())){
+                        myPlants.add(p);
+                    }
+                } else {
+                    myPlants.add(p);
+                }
             }
         }
-        return implementPagination(liked, page, size);
+        return implementPagination(myPlants, page, size);
     }
 
     @Override
-    public boolean addToCollection(Principal principal, long id) {
+    public int addToCollection(Principal principal, long id) {
         Plant plant = plantRepository.findById(id);
         User user = userService.findByUsername(principal.getName());
 
         if(user.getPlantCollection().contains(plant)){
-            return false;
+            return -1;
         }
         user.getPlantCollection().add(plant);
         userService.save(user);
-        return true;
+        return plant.getUsers().size();
     }
 
     @Override
-    public boolean removeFromCollection(Principal principal, long id) {
+    public int removeFromCollection(Principal principal, long id) {
         Plant plant = plantRepository.findById(id);
         User user = userService.findByUsername(principal.getName());
 
         if(!user.getPlantCollection().contains(plant)){
-            return false;
+            return -1;
         }
         user.getPlantCollection().remove(plant);
         userService.save(user);
-        return true;
+        return plant.getUsers().size();
     }
 
     @Override

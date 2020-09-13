@@ -44,9 +44,9 @@ public class PlantController {
         }
     }
 
-    @GetMapping(params = {"page","size"})
-    public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size){
-        Page<PlantDTO> plants = plantService.findPageable(page,size);
+    @GetMapping(params = {"page","size","search"})
+    public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size, @RequestParam String search){
+        Page<PlantDTO> plants = plantService.findPageable(page,size,search);
         if(plants != null){
             return new ResponseEntity<>(plants, HttpStatus.OK);
         } else {
@@ -73,9 +73,9 @@ public class PlantController {
         }
     }
 
-    @GetMapping(value = {"liked"}, params = {"page","size"})
-    public ResponseEntity<?> getAllLikedPlants(@RequestParam int page, @RequestParam int size, Principal principal){
-        Page<PlantDTO> plants = plantService.findAllLikedByUser(page, size, principal);
+    @GetMapping(value = {"liked"}, params = {"page","size","search"})
+    public ResponseEntity<?> getAllLikedPlants(@RequestParam int page, @RequestParam int size, @RequestParam String search, Principal principal){
+        Page<PlantDTO> plants = plantService.findAllLikedByUser(page, size, search, principal);
         if(plants != null){
             return new ResponseEntity<>(plants, HttpStatus.OK);
         } else {
@@ -83,9 +83,9 @@ public class PlantController {
         }
     }
 
-    @GetMapping(value = {"my"}, params = {"page","size"})
-    public ResponseEntity<?> getAllMyPlants(@RequestParam int page, @RequestParam int size, Principal principal){
-        Page<PlantDTO> plants = plantService.findAllMyPlants(page, size, principal);
+    @GetMapping(value = {"my"}, params = {"page","size","search"})
+    public ResponseEntity<?> getAllMyPlants(@RequestParam int page, @RequestParam int size, @RequestParam String search, Principal principal){
+        Page<PlantDTO> plants = plantService.findAllMyPlants(page, size, search, principal);
         if(plants != null){
             return new ResponseEntity<>(plants, HttpStatus.OK);
         } else {
@@ -95,9 +95,9 @@ public class PlantController {
 
     @GetMapping(value={"like/{id}"})
     public ResponseEntity<?> addPlantToCollection(@PathVariable String id, Principal principal){
-        boolean isLiked = plantService.addToCollection(principal, Long.parseLong(id));
-        if(isLiked){
-            return new ResponseEntity<>(HttpStatus.OK);
+        int likes = plantService.addToCollection(principal, Long.parseLong(id));
+        if(likes != -1){
+            return new ResponseEntity<>(likes, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Plant is not added to collection.", HttpStatus.BAD_REQUEST);
         }
@@ -105,9 +105,9 @@ public class PlantController {
 
     @GetMapping(value={"dislike/{id}"})
     public ResponseEntity<?> removePlantToCollection(@PathVariable String id, Principal principal){
-        boolean isLiked = plantService.removeFromCollection(principal, Long.parseLong(id));
-        if(isLiked){
-            return new ResponseEntity<>(HttpStatus.OK);
+        int likes = plantService.removeFromCollection(principal, Long.parseLong(id));
+        if(likes != -1){
+            return new ResponseEntity<>(likes, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Plant is not removed from collection.", HttpStatus.BAD_REQUEST);
         }

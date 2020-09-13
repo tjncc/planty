@@ -12,9 +12,18 @@ public class PlantDTO {
     private String info;
     private String image;
     private String creator;
+    private int likes;
 
     public PlantDTO(){
 
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
     public long getId() {

@@ -8,6 +8,7 @@ import RenderPlants from './RenderPlants'
 import axios from 'axios'
 import { store } from 'react-notifications-component'
 import UserUpdate from './UserUpdate'
+import heart from '../icons/likebtn.svg'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -79,6 +80,7 @@ class HomePage extends React.Component {
                     <h2>Your plants</h2>
                     <Tabs defaultActiveKey="first" transition={false} id="noanim-tab-example">
                         <Tab eventKey="first" title="Collection">
+                            <img src={heart} style={{width: "25px", margin: "0.2% 0 -1% 0"}} />
                            <RenderPlants content={"COLLECTION"} />
                         </Tab>
                         <Tab eventKey="second" title="My plants">

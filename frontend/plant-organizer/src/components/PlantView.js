@@ -7,6 +7,9 @@ import newicon from '../icons/new.svg'
 import RenderPlants from './RenderPlants'
 import axios from 'axios'
 import { store } from 'react-notifications-component'
+import heart from '../icons/heart.svg'
+import btnheart from '../icons/likebtn.svg'
+import heartbreak from '../icons/heartbreak.svg'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -17,6 +20,7 @@ class HomePage extends React.Component {
             isLoggedIn: false,
             plant: [],
             isLiked: false,
+            likes: 0,
         }
     }
 
@@ -71,7 +75,8 @@ class HomePage extends React.Component {
         axios.get(`${serviceConfig.baseURL}/plant/${this.props.id}`).then(
             (resp) => {
                 this.setState({
-                    plant: resp.data
+                    plant: resp.data,
+                    likes: resp.data.likes
                     
                 })
                 console.log(this.state)
@@ -150,7 +155,7 @@ class HomePage extends React.Component {
         axios.get(`${serviceConfig.baseURL}/plant/check/${this.props.id}`, options).then(
             (resp) => {
                 this.setState({
-                    isLiked: resp.data               
+                    isLiked: resp.data,               
                 })
                 console.log(this.state.isLiked)
             },
@@ -182,7 +187,8 @@ class HomePage extends React.Component {
         axios.get(`${serviceConfig.baseURL}/plant/like/${this.props.id}`, options).then(
             (resp) => {
                 this.setState({
-                    isLiked: true               
+                    isLiked: true,
+                    likes: resp.data               
                 })
                 console.log(this.state.isLiked)
             },
@@ -214,7 +220,8 @@ class HomePage extends React.Component {
         axios.get(`${serviceConfig.baseURL}/plant/dislike/${this.props.id}`, options).then(
             (resp) => {
                 this.setState({
-                    isLiked: false               
+                    isLiked: false,
+                    likes: resp.data               
                 })
                 console.log(this.state.isLiked)
             },
@@ -264,13 +271,22 @@ class HomePage extends React.Component {
                 
 
                 <div className="div3PlantView">
+                    <div>
+                        <img src={heart} style={{width: "30px", margin: "2% 3% 4% 0"}} />
+                        <label className="likeNum">{this.state.likes}</label>
+                    </div>
+                    
                 {
                     this.state.user.role === "USER" && !this.state.isLiked &&
-                    <button className="userLikeBtn" onClick={this.addToCollection.bind(this)}>Add to my collection</button>
+                    <button className="userLikeBtn" onClick={this.addToCollection.bind(this)}>
+                        <img src={btnheart} style={{width: "30px", margin: "0 3% 0 0"}} />
+                        Add to my collection</button>
                 }
                                 {
                     this.state.user.role === "USER" && this.state.isLiked &&
-                    <button className="userLikeBtn" onClick={this.removeFromCollection.bind(this)}>Remove from my collection</button>
+                    <button className="userLikeBtn" onClick={this.removeFromCollection.bind(this)}>
+                         <img src={heartbreak} style={{width: "30px", margin: "0 3% 0 0"}} />
+                        Remove</button>
                 }
                 {
                     (this.state.user.role === "ADMIN" || this.state.user.username === this.state.plant.creator) &&

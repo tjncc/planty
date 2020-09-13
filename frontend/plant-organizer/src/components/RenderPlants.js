@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Pagination } from "react-bootstrap"
+import { Button, Card, Form, Pagination } from "react-bootstrap"
 import { serviceConfig } from '../appSettings.js'
 import '../css/RenderPlants.css'
 import planticon from '../icons/flower.svg'
@@ -20,6 +20,7 @@ class RenderPlants extends React.Component {
             totalPages: 0,
             pageNumber: 0,
             size: 8,
+            search: '',
         }
     }
 
@@ -39,17 +40,17 @@ class RenderPlants extends React.Component {
             var sizePage = 6;
 
             if(this.props.content === "COLLECTION"){
-                var urlPath = `${serviceConfig.baseURL}/plant/liked?page=${this.state.pageNumber}&size=${sizePage}`
+                var urlPath = `${serviceConfig.baseURL}/plant/liked?page=${this.state.pageNumber}&size=${sizePage}&search=${this.state.search}`
             }
             else if (this.props.content === "MYPLANTS"){
-                var urlPath = `${serviceConfig.baseURL}/plant/my?page=${this.state.pageNumber}&size=${sizePage}`
+                var urlPath = `${serviceConfig.baseURL}/plant/my?page=${this.state.pageNumber}&size=${sizePage}&search=${this.state.search}`
             }
             else if (this.props.content === "MYREQUESTS"){
                 this.getAllRequests();
                 return;
             }
             else {
-                var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}`
+                var urlPath = `${serviceConfig.baseURL}/plant?page=${this.state.pageNumber}&size=${this.state.size}&search=${this.state.search}`
             } 
 
             axios.get(urlPath, options).then(
@@ -78,6 +79,7 @@ class RenderPlants extends React.Component {
             );
         
     }
+
 
     getAllRequests(){
         let token = localStorage.getItem('token');
@@ -217,10 +219,28 @@ class RenderPlants extends React.Component {
     }   
     }
 
+    search(e){
+        this.state.search = e.target.value; 
+        this.forceUpdate();
+        this.getAllPlants();
+    }
+
 
     render(){
         return(
             <div>
+                <div>
+                    {
+                        this.props.content !== "MYREQUESTS" &&
+                        <Form.Control 
+                        name="search"
+                        placeholder="Search by name or family"
+                        style={{width: "50%", margin: "2% auto 0 auto", border: "1px solid rgb(106,148,158)"}}
+                        onChange={this.search.bind(this)}
+                        ></Form.Control>
+                    }
+                    
+                </div>
                 {
                     this.props.content === "MYREQUESTS" &&
                     <div className="renderAllPlants">

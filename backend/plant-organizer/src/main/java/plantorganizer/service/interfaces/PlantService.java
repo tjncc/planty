@@ -16,12 +16,12 @@ public interface PlantService {
     List<PlantDTO> findAll();
     Boolean deletePlant(long id);
     PlantDTO updatePlant(long id, PlantDTO plantDTO);
-    Page<PlantDTO> findPageable(int page, int size);
+    Page<PlantDTO> findPageable(int page, int size, String searc);
     Plant saveModel(NewPlantDTO plantDTO);
-    Page<PlantDTO> findAllLikedByUser(int page, int size, Principal principal);
+    Page<PlantDTO> findAllLikedByUser(int page, int size, String search, Principal principal);
     Page<PlantDTO> implementPagination(List<Plant> plants, int page, int size);
-    Page<PlantDTO> findAllMyPlants(int page, int size, Principal principal);
-    boolean addToCollection(Principal principal, long id);
-    boolean removeFromCollection(Principal principal, long id);
+    Page<PlantDTO> findAllMyPlants(int page, int size, String search, Principal principal);
+    int addToCollection(Principal principal, long id);
+    int removeFromCollection(Principal principal, long id);
     boolean isLiked(Principal principal, long id);
 }
