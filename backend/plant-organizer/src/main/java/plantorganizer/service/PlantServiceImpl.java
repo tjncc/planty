@@ -6,6 +6,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
+import plantorganizer.helpers.WateringTime;
 import plantorganizer.model.Plant;
 import plantorganizer.model.User;
 import plantorganizer.repository.PlantRepository;
@@ -45,13 +46,9 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public PlantDTO findByName(String name) {
-
-        Plant plant = plantRepository.findByName(name);
-        if(plant == null){
-            return null;
-        }
-        return modelMapper.map(plant, PlantDTO.class);
+    public List<Plant> findAllByWateringTime(WateringTime wateringTime) {
+        List<Plant> plants = plantRepository.findAllByWateringTime(wateringTime);
+        return plants;
     }
 
     @Override
@@ -189,7 +186,6 @@ public class PlantServiceImpl implements PlantService {
         }
         return false;
     }
-
 
     @Override
     public List<PlantDTO> findAll() {

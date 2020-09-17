@@ -3,7 +3,9 @@ package plantorganizer.service.interfaces;
 import org.springframework.data.domain.Page;
 import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
+import plantorganizer.helpers.WateringTime;
 import plantorganizer.model.Plant;
+import plantorganizer.model.User;
 
 import java.security.Principal;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.List;
 public interface PlantService {
 
     PlantDTO findById(long id);
-    PlantDTO findByName(String name);
+    List<Plant> findAllByWateringTime(WateringTime wateringTime);
     PlantDTO save(PlantDTO plantDTO);
     List<PlantDTO> findAll();
     Boolean deletePlant(long id);

@@ -37,7 +37,7 @@ public class Plant {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @ManyToMany(mappedBy = "plantCollection")
+    @ManyToMany(mappedBy = "plantCollection", fetch = FetchType.EAGER)
     private Set<User> users;
 
     public Plant(){

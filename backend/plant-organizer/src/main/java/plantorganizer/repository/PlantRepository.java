@@ -2,6 +2,7 @@ package plantorganizer.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import plantorganizer.helpers.WateringTime;
 import plantorganizer.model.Plant;
 import plantorganizer.model.User;
 
@@ -15,6 +16,5 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
     Plant save(Plant plant);
     List<Plant> findAll();
     void deleteById(long id);
-    List<Plant> findByCreator(User user);
-    List<Plant> findByUsers(long id);
+    List<Plant> findAllByWateringTime(WateringTime wateringTime);
 }

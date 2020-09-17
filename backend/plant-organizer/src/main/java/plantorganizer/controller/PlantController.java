@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.RouteMatcher;
 import org.springframework.web.bind.annotation.*;
 import plantorganizer.dto.PlantDTO;
+import plantorganizer.helpers.WateringTime;
+import plantorganizer.model.Plant;
 import plantorganizer.security.auth.JwtAuthenticationRequest;
 import plantorganizer.service.interfaces.PlantService;
 
@@ -118,5 +120,4 @@ public class PlantController {
         boolean isLiked = plantService.isLiked(principal, Long.parseLong(id));
         return new ResponseEntity<>(isLiked, HttpStatus.OK);
     }
-
 }

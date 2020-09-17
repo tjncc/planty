@@ -205,6 +205,7 @@ class AddPlant extends React.Component {
                                 <Form.Group as={Col}>
                                     <input className="fileInput" 
                                     type="file" 
+                                    accept=".jpg,.jpeg,.png"
                                     style={{display: 'none'}}
                                     onChange={this.handleImageUpload}
                                     ref={fileInput => this.fileInput = fileInput} />
