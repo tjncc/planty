@@ -21,9 +21,6 @@ public class NotificationServiceImpl implements NotificationService {
     private PlantService plantService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private EmailService emailService;
 
     @Scheduled(cron = "0 0 9 * * *")
