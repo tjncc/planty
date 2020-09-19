@@ -6,19 +6,24 @@
     color: rgb(102, 138, 139);
 }
 
-.div1PlantView, .div2PlantView, .div3PlantView{
+.div1PlantView, .div2PlantView, .div3PlantView, .div1PlantViewEdit, .div2PlantViewEdit{
     display: flex;
     flex-direction: column;
     padding: 1% 2%;
 }
 
-.div1PlantView{
+.div1PlantView, .div1PlantViewEdit{
     width: 33%;
     border: 1px solid rgb(201, 218, 217);
-    padding: 1% 5% 5% 5%;
+    padding: 1% 5% 2% 5%;
+    margin-bottom: 2%;
 }
 
-.div2PlantView{
+.div1PlantViewEdit, .div2PlantViewEdit{
+    font-size: 20px;
+}
+
+.div2PlantView, .div2PlantViewEdit{
     width: 40%;
 }
 
@@ -70,12 +75,17 @@
     
 }
 
+.formControlArea{
+    resize: none;
+    width: 90%;
+}
+
 @media screen and (max-width: 1000px) {
     .mainDivPlantView{
         display: flex;
         flex-direction: column;
     }
-    .div1PlantView, .div2PlantView, .div3PlantView{
+    .div1PlantView, .div2PlantView, .div3PlantView, .div1PlantViewEdit, .div2PlantViewEdit{
         width: 100%;
     }
 }

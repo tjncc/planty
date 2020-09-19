@@ -213,6 +213,7 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public PlantDTO updatePlant(long id, PlantDTO plantDTO) {
+        plantDTO.setId(id);
         Plant plant = plantRepository.findById(id);
         if(plant == null){
             return null;
