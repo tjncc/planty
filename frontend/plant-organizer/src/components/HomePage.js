@@ -6,6 +6,7 @@ import plant from '../icons/flower.svg'
 import newicon from '../icons/new.svg'
 import RenderPlants from './RenderPlants'
 import axios from 'axios'
+import background from '../icons/leaf.png'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -51,6 +52,7 @@ class HomePage extends React.Component {
     render(){
         return(
             <div className="mainDiv">
+                <img src={background} id="bg" alt=""></img>
                 {
                     this.state.isLoggedIn && this.state.user.role === "USER" &&
                     <div className="div1">
@@ -69,6 +71,16 @@ class HomePage extends React.Component {
                     <button className="btnAddNew" onClick={this.changePath.bind(this,"add")}>
                         Add new plant
                     </button>
+                    </div>
+                }
+
+                {
+                    !this.state.isLoggedIn &&
+                    <div className="divWelcome">
+                        <label className="welcome">
+                            Welcome!
+                        </label>
+                        <label className="welcomeMsg">You can log in or register to start your plant organization.</label>
                     </div>
                 }
                 

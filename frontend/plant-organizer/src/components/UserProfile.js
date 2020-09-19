@@ -81,10 +81,14 @@ class HomePage extends React.Component {
                     <Tabs defaultActiveKey="first" transition={false} id="noanim-tab-example">
                         <Tab eventKey="first" title="Collection">
                             <img src={heart} style={{width: "25px", margin: "0.2% 0 -1% 0"}} />
-                           <RenderPlants content={"COLLECTION"} />
+                            <div style={{marginLeft: '6%'}}>
+                                <RenderPlants content={"COLLECTION"} />
+                            </div>
                         </Tab>
                         <Tab eventKey="second" title="My plants">
+                        <div style={{marginLeft: '6%'}}>
                             <RenderPlants content={"MYPLANTS"} />
+                            </div>
                         </Tab>
                         <Tab eventKey="third" title="My requests">
                         <RenderPlants content={"MYREQUESTS"} />

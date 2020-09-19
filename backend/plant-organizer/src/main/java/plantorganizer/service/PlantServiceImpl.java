@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import plantorganizer.dto.NewPlantDTO;
 import plantorganizer.dto.PlantDTO;
 import plantorganizer.helpers.WateringTime;
@@ -16,6 +17,7 @@ import plantorganizer.service.interfaces.UserService;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PlantServiceImpl implements PlantService {
@@ -204,7 +206,12 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public Boolean deletePlant(long id) {
         if(plantRepository.findById(id) != null){
-            plantRepository.deleteById(id);
+            Plant plant = plantRepository.findById(id);
+            Set<User> users = plant.getUsers();
+            for(User user: users){
+                user.getPlantCollection().remove(plant);
+            }
+            plantRepository.delete(plant);
             return true;
         } else {
             return false;

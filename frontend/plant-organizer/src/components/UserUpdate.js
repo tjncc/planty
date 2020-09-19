@@ -64,6 +64,12 @@ class UserUpdate extends React.Component {
             
             axios.post(`${serviceConfig.baseURL}/user/update`, userInfo, options).then(
                     (response) => { 
+                        
+                        this.setState({
+                            isLoggedIn: false
+                        });
+
+                        localStorage.clear();
                         store.addNotification({
                             title: "Successfully updated",
                             message: "Your profile info is changed.",
@@ -77,7 +83,7 @@ class UserUpdate extends React.Component {
                                 pauseOnHover: true
                               },
                             onRemoval: () => {
-                                window.location.reload();
+                                window.location.href = "http://localhost:3000";
                               },
                           })
                     },
@@ -121,7 +127,6 @@ class UserUpdate extends React.Component {
                             <div>
                                <Form.Label className="userInfo">{this.props.content.username}</Form.Label> 
                             </div>
-                            
                         }
                    </Form.Group>
                    <Form.Group as={Col}>

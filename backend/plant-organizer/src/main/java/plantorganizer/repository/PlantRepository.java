@@ -12,9 +12,8 @@ import java.util.List;
 public interface PlantRepository extends JpaRepository<Plant, Long> {
 
     Plant findById(long id);
-    Plant findByName(String name);
     Plant save(Plant plant);
     List<Plant> findAll();
-    void deleteById(long id);
+    void delete(Plant plant);
     List<Plant> findAllByWateringTime(WateringTime wateringTime);
 }

@@ -49,7 +49,7 @@ public class User implements UserDetails {
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private List<Plant> plants = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_plants",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "plant_id", referencedColumnName = "id"))
