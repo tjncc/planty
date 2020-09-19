@@ -6,5 +6,4 @@ public interface NotificationService {
     void sendWeeklyNotification() throws InterruptedException;
     void sendMonthlyNotification() throws InterruptedException;
     void sendRarelyNotification() throws InterruptedException;
-
 }

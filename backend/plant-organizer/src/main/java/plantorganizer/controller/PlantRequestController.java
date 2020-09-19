@@ -40,7 +40,7 @@ public class PlantRequestController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getPlantById(@PathVariable String id){
+    public ResponseEntity<?> getPlantRequestById(@PathVariable String id){
         PlantRequestDTO request = plantRequestService.findById(Long.parseLong(id));
         if(request != null){
             return new ResponseEntity<>(request, HttpStatus.OK);
@@ -92,7 +92,7 @@ public class PlantRequestController {
     }
 
     @GetMapping(params = {"page","size", "status"})
-    public ResponseEntity<?> getAllPlants(@RequestParam int page, @RequestParam int size, @RequestParam RequestStatus status){
+    public ResponseEntity<?> getAllPlantRequests(@RequestParam int page, @RequestParam int size, @RequestParam RequestStatus status){
         Page<PlantRequestDTO> plants = plantRequestService.findPageable(page,size,status);
         if(plants != null){
             return new ResponseEntity<>(plants, HttpStatus.OK);

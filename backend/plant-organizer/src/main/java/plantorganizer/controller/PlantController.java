@@ -106,7 +106,7 @@ public class PlantController {
     }
 
     @GetMapping(value={"dislike/{id}"})
-    public ResponseEntity<?> removePlantToCollection(@PathVariable String id, Principal principal){
+    public ResponseEntity<?> removePlantFromCollection(@PathVariable String id, Principal principal){
         int likes = plantService.removeFromCollection(principal, Long.parseLong(id));
         if(likes != -1){
             return new ResponseEntity<>(likes, HttpStatus.OK);
