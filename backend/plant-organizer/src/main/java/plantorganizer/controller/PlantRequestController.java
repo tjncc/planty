@@ -59,8 +59,8 @@ public class PlantRequestController {
         }
     }
 
-
-    @PostMapping("/accept")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("accept")
     public ResponseEntity<?> acceptRequest(@RequestBody ReqIdDTO req){
         boolean isAccepted = plantRequestService.approveRequest(Long.parseLong(req.reqId));
         if(isAccepted){
@@ -70,7 +70,8 @@ public class PlantRequestController {
         }
     }
 
-    @PostMapping("/decline")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("decline")
     public ResponseEntity<?> declineRequest(@RequestBody ReqIdDTO req){
         boolean isDeclined = plantRequestService.declineRequest(Long.parseLong(req.reqId));
         if(isDeclined){
@@ -101,6 +102,7 @@ public class PlantRequestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = {"my"}, params = {"page","size"})
     public ResponseEntity<?> getAllRequestsByCreator(@RequestParam int page, @RequestParam int size, Principal principal){
         Page<PlantRequestDTO> plants = plantRequestService.findRequestsByCreator(principal, page, size);

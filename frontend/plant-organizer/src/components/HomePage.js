@@ -60,7 +60,7 @@ class HomePage extends React.Component {
                             Add new plant
                         </button>
                         <br />
-                        <button className="btnAddNew">
+                        <button onClick={this.changePath.bind(this,`profile/${this.state.user.username}`)} className="btnAddNew">
                             My plants
                         </button>
                     </div>
@@ -68,8 +68,8 @@ class HomePage extends React.Component {
                 {
                     this.state.isLoggedIn && this.state.user.role === "ADMIN" &&
                     <div className="div1">
-                    <button className="btnAddNew" onClick={this.changePath.bind(this,"add")}>
-                        Add new plant
+                    <button className="btnAddNew" onClick={this.changePath.bind(this,`profile/${this.state.user.username}`)}>
+                        Manage requests
                     </button>
                     </div>
                 }

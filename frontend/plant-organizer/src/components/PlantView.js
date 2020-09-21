@@ -217,9 +217,8 @@ class HomePage extends React.Component {
             (resp) => {
                 this.setState({
                     isLiked: true,
-                    likes: resp.data               
+                    likes: this.state.likes + 1              
                 })
-                console.log(this.state.isLiked)
             },
             (resp) => {
                 store.addNotification({
@@ -250,9 +249,8 @@ class HomePage extends React.Component {
             (resp) => {
                 this.setState({
                     isLiked: false,
-                    likes: resp.data               
+                    likes: this.state.likes - 1           
                 })
-                console.log(this.state.isLiked)
             },
             (resp) => {
                 store.addNotification({

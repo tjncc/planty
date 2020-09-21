@@ -38,14 +38,13 @@ public class TokenUtils {
     TimeProvider timeProvider;
 
 
-    public String generateToken(String email) {
+    public String generateToken(String username) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
-                .setSubject(email)
+                .setSubject(username)
                 .setAudience(generateAudience())
                 .setIssuedAt(timeProvider.now())
                 .setExpiration(generateExpirationDate())
-                //.claim("role", role)
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
 

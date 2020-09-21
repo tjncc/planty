@@ -24,7 +24,7 @@ public class PlantController {
     @Autowired
     PlantService plantService;
 
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping
     public ResponseEntity<?> addPlant(@RequestBody PlantDTO plantDTO) {
 
@@ -65,6 +65,7 @@ public class PlantController {
         }
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @PutMapping("{id}")
     public ResponseEntity<?> updatePlant(@PathVariable String id, @RequestBody PlantDTO plantDTO){
         PlantDTO plant = plantService.updatePlant(Long.parseLong(id),plantDTO);
@@ -75,6 +76,7 @@ public class PlantController {
         }
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = {"liked"}, params = {"page","size","search"})
     public ResponseEntity<?> getAllLikedPlants(@RequestParam int page, @RequestParam int size, @RequestParam String search, Principal principal){
         Page<PlantDTO> plants = plantService.findAllLikedByUser(page, size, search, principal);
@@ -85,6 +87,7 @@ public class PlantController {
         }
     }
 
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = {"my"}, params = {"page","size","search"})
     public ResponseEntity<?> getAllMyPlants(@RequestParam int page, @RequestParam int size, @RequestParam String search, Principal principal){
         Page<PlantDTO> plants = plantService.findAllMyPlants(page, size, search, principal);
