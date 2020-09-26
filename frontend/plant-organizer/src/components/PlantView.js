@@ -10,6 +10,7 @@ import { store } from 'react-notifications-component'
 import heart from '../icons/heart.svg'
 import btnheart from '../icons/likebtn.svg'
 import heartbreak from '../icons/heartbreak.svg'
+import DeleteModal from './DeleteModal'
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -115,51 +116,6 @@ class HomePage extends React.Component {
                 store.addNotification({
                     title: "Error",
                     message: "Cannot load plant.",
-                    type: "danger",
-                    insert: "right",
-                    container: "top-right",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 1600,
-                        pauseOnHover: true
-                      },
-                  })
-            }
-        );
-    }
-
-    deletePlant(){
-        
-        let token = localStorage.getItem('token');
-        const options = {
-            headers: { 'Authorization': 'Bearer ' + token }
-        };
-
-        axios.delete(`${serviceConfig.baseURL}/plant/${this.props.id}`, options).then(
-            (resp) => {
-                store.addNotification({
-                    title: "Successfully deleted!",
-                    message: "Plant is deleted.",
-                    type: "success",
-                    insert: "right",
-                    container: "top-right",
-                    animationIn: ["animated", "fadeIn"],
-                    animationOut: ["animated", "fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        pauseOnHover: true
-                      },
-                      onRemoval: () => {
-                        window.location.href = "http://localhost:3000/" 
-                      },
-                  })
-                
-            },
-            (resp) => {
-                store.addNotification({
-                    title: "Error",
-                    message: "Unsuccessful removing plant.",
                     type: "danger",
                     insert: "right",
                     container: "top-right",
@@ -502,8 +458,8 @@ class HomePage extends React.Component {
                     </div>
                 }
                 {
-                    (this.state.user.role === "ADMIN" || this.state.user.username === this.state.plant.creator) && !this.state.editMode &&
-                    <button onClick={this.deletePlant.bind(this)} className="userLikeBtn">Delete</button>
+                    (this.state.user.role === "ADMIN" || this.state.user.username === this.state.plant.creator) && !this.state.editMode &&               
+                    <DeleteModal content={this.state.plant.id} />
                 }
                 </div>
             </div>
