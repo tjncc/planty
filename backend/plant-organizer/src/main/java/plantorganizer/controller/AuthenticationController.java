@@ -1,5 +1,8 @@
 package plantorganizer.controller;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import plantorganizer.config.NotificationTask;
 import plantorganizer.dto.UserDTO;
 import plantorganizer.model.PersonTokenState;
 import plantorganizer.model.User;
@@ -18,6 +21,7 @@ import plantorganizer.service.interfaces.UserService;
 
 import javax.websocket.server.PathParam;
 import java.security.Principal;
+import java.time.*;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -32,6 +36,11 @@ public class AuthenticationController {
     @Autowired
     TokenUtils tokenUtils;
 
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PostMapping(value = "/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest){
@@ -77,6 +86,17 @@ public class AuthenticationController {
 
         if(user != null){
             UserDTO userDTO = new UserDTO(user);
+
+            LocalDateTime time = LocalDate.now().now().atTime(LocalTime.now());
+            ZonedDateTime timeZone = ZonedDateTime.of(time, ZoneId.systemDefault());
+
+            simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/socket-publisher/", "Hello!");
+
+            taskScheduler.schedule(
+                    new NotificationTask(simpMessagingTemplate, user),
+                    Instant.from(timeZone)
+            );
+
             return ResponseEntity.ok(userDTO);
         }else {
             return  ResponseEntity.status(500).build();

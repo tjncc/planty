@@ -8,13 +8,17 @@ import Login from './LoginPage'
 import Register from './RegisterPage'
 import axios from 'axios'
 import { store } from 'react-notifications-component'
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'stompjs';
+
+let socket = '';
+let stompClient = '';
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
 
         this.logout = this.logout.bind(this);
-        //this.changePath = this.changePath.bind(this);
 
         this.state = {
             isLoggedIn: false,
@@ -42,8 +46,7 @@ class Header extends React.Component {
             axios.get(`${serviceConfig.baseURL}/auth/role`, options).then(
                     (response) => { 
                         this.setState({ user: response.data, isLoggedIn: true});
-                        console.log(this.state) 
-
+                        this.socketSetup(response.data);
                     },
                     (response) => {
                         store.addNotification({
@@ -64,6 +67,19 @@ class Header extends React.Component {
 
     }
 
+    socketSetup(user){
+        let token = `accessToken=${localStorage.getItem('token')}`;
+           
+        socket = new SockJS(`${serviceConfig.baseURL}/socket/?${token}`);
+        stompClient = Stomp.over(socket);
+           stompClient.connect({name: user.username}, function () {
+             alert('connected');
+             let loaded = true;
+             openGlobalSocket(loaded);  
+           }) 
+    }
+
+
     logout(){
 
         this.setState({
@@ -71,6 +87,7 @@ class Header extends React.Component {
         });
 
         localStorage.clear();
+        socket.close();
         window.location.href="http://localhost:3000/";
     }
 
@@ -117,3 +134,33 @@ class Header extends React.Component {
 }
 
 export default Header
+
+
+const openGlobalSocket = (loaded) => {
+   
+    if (loaded) {
+        stompClient.subscribe("/user/socket-publisher/");
+
+        console.log(stompClient)
+        
+        socket.onmessage = function (event) {
+            alert(event.data.substring(event.data.indexOf("Y")))
+        //     store.addNotification({
+        //       title: "New notification",
+        //       message: event.data.substring(event.data.indexOf("Y")),
+        //       type: "success",
+        //       insert: "top",
+        //       container: "bottom-right",
+        //       animationIn: ["animated", "fadeIn"],
+        //       animationOut: ["animated", "fadeOut"],
+        //       dismiss: {
+        //           duration: 2000,
+        //           pauseOnHover: true
+        //       }
+
+        //   })
+        }
+
+    }
+       
+  }

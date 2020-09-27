@@ -41,6 +41,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
+        } else if(httpServletRequest.getQueryString() != null && httpServletRequest.getQueryString().contains("accessToken")){
+            String authTokenVersion2 = httpServletRequest.getParameterMap().get("accessToken")[0];
+            if(authTokenVersion2 != null){
+                username = tokenUtils.getUsernameFromToken(authTokenVersion2);
+
+                if(username != null){
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                    if (tokenUtils.validateToken(authTokenVersion2, userDetails)) {
+                        // kreiraj autentifikaciju
+                        TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
+                        authentication.setToken(authTokenVersion2);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+            }
         }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
