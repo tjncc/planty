@@ -21,9 +21,6 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private UserService userService;
-
     @Override
     @Async
     public void sendNotificaitionAsync(User user, Plant plant) throws InterruptedException {
