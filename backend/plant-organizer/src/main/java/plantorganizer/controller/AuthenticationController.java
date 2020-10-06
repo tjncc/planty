@@ -14,9 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import plantorganizer.security.TokenUtils;
 import plantorganizer.security.auth.JwtAuthenticationRequest;
+import plantorganizer.service.interfaces.NotificationService;
 import plantorganizer.service.interfaces.UserService;
 
 import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -32,9 +34,12 @@ public class AuthenticationController {
     @Autowired
     TokenUtils tokenUtils;
 
+    @Autowired
+    NotificationService notificationService;
+
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest){
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws IOException {
 
         if(userService.findByUsername(authenticationRequest.getUsername()) == null){
             return new ResponseEntity<>("User with this username does not exist!", HttpStatus.NOT_FOUND);
@@ -55,6 +60,7 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
+        notificationService.checkNotifications(user);
         return ResponseEntity.ok(new PersonTokenState(jwt, expiresIn, user.getUsername()));
 
     }
@@ -81,7 +87,6 @@ public class AuthenticationController {
         }else {
             return  ResponseEntity.status(500).build();
         }
-
     }
 
 }
