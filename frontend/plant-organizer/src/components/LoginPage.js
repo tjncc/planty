@@ -25,6 +25,40 @@ class LoginPage extends React.Component{
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
+    componentDidMount(){
+        let ws = new WebSocket(`ws://localhost:8081/socket`);
+        ws.onopen = () => {
+            console.log('connected')
+        }
+
+        ws.onmessage = evt => {
+                // listen to data sent from the websocket server
+
+                setTimeout(() => {     
+            store.addNotification({
+                    message: evt.data,
+                    type: "info",
+                    insert: "right",
+                    container: "top-center",
+                    animationIn: ["animated", "fadeIn"],
+                    animationOut: ["animated", "fadeOut"],
+                    dismiss: {
+                        duration: 2500,
+                        pauseOnHover: true
+                      },
+                  })
+            
+            }, 1000)
+                
+        }
+        
+        ws.onclose = () => {
+            console.log('disconnected')
+            // automatically try to reconnect on connection loss
+        
+        } 
+    }
+
     
     login(e) {
         e.preventDefault();
@@ -38,7 +72,6 @@ class LoginPage extends React.Component{
                     headers: { 'token': resp.data.accessToken}
                 };
 
-                window.location.href = "http://localhost:3000/"
                 store.addNotification({
                     title: "Welcome",
                     message: "Logged in successfully!",
@@ -48,7 +81,7 @@ class LoginPage extends React.Component{
                     animationIn: ["animated", "fadeIn"],
                     animationOut: ["animated", "fadeOut"],
                     dismiss: {
-                        duration: 2000,
+                        duration: 1800,
                         pauseOnHover: true
                       },
                     onRemoval: () => {
@@ -70,9 +103,28 @@ class LoginPage extends React.Component{
                         pauseOnHover: true
                       },
                   })
-             }
+             }, this.readMessages()
         );
 
+    }
+
+    readMessages(){
+        let token = localStorage.getItem('token');
+
+        if(token !== null){
+  
+            const options = {
+                headers: { 'Authorization': 'Bearer ' + token}
+            };
+
+
+            axios.get(`${serviceConfig.baseURL}/user/username`, options).then(
+                    (response) => { },
+                    (response) => { }
+                );
+
+        
+        }
     }
     
 

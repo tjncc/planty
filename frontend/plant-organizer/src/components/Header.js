@@ -11,16 +11,12 @@ import { store } from 'react-notifications-component'
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 
-let socket = '';
-let stompClient = '';
 let ws = '';
-
 class Header extends React.Component {
     constructor(props) {
         super(props);
 
         this.logout = this.logout.bind(this);
-        //this.changePath = this.changePath.bind(this);
 
         this.state = {
             isLoggedIn: false,
@@ -30,31 +26,7 @@ class Header extends React.Component {
     }
 
     componentDidMount(){
-        this.getRole();
-        //let ws = new WebSocket(`ws://localhost:8081/socket`);
-        let token = localStorage.getItem('token');
-        if(token !== null){
-
-       
-        // ws.onopen = () => {
-        //     // on connecting, do nothing but log it to the console
-        //     console.log('connected')
-        //     console.log(this.state.user.username)
-        //     ws.send(this.state.user.username);
-        // }
-
-        // ws.onmessage = evt => {
-        //         // listen to data sent from the websocket server
-
-        //     console.log(evt.data)
-        // }
-        
-        // ws.onclose = () => {
-        //     console.log('disconnected')
-        //     // automatically try to reconnect on connection loss
-        
-        // } 
-    }      
+        this.getRole();    
     }
 
     
@@ -72,43 +44,6 @@ class Header extends React.Component {
             axios.get(`${serviceConfig.baseURL}/auth/role`, options).then(
                     (response) => { 
                         this.setState({ user: response.data, isLoggedIn: true});
-                        
-                        let ws = new WebSocket(`ws://localhost:8081/socket`);
-                        ws.onopen = () => {
-                            // on connecting, do nothing but log it to the console
-                            console.log('connected')
-                            console.log(this.state.user.username)
-                            ws.send(this.state.user.username);
-
-                            //  axios.get(`${serviceConfig.baseURL}/user/username`, options).then(
-                            //      (response) => { },
-                            //      (response) => { }
-                            //  )
-                        }
-                
-                        ws.onmessage = evt => {
-                                // listen to data sent from the websocket server
-                
-                                store.addNotification({
-                                    message: evt.data,
-                                    type: "info",
-                                    insert: "right",
-                                    container: "top-center",
-                                    animationIn: ["animated", "fadeIn"],
-                                    animationOut: ["animated", "fadeOut"],
-                                    dismiss: {
-                                        duration: 2500,
-                                        pauseOnHover: true
-                                      },
-                                  })
-                        }
-                        
-                        ws.onclose = () => {
-                            console.log('disconnected')
-                            // automatically try to reconnect on connection loss
-                        
-                        } 
-
                     },
                     (response) => {
                         store.addNotification({
